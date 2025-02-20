@@ -17,7 +17,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "dictionaries", "dictionarie
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Элементы решения", "Элементы решения", "{4DDEB4CC-726C-41A0-932E-8448295C12BC}"
 	ProjectSection(SolutionItems) = preProject
-		ОтчётКТ2.txt = ОтчётКТ2.txt
+		ОтчётКТ2.md = ОтчётКТ2.md
 	EndProjectSection
 EndProject
 Global

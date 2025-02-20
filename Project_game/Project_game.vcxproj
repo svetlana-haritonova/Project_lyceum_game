@@ -130,6 +130,7 @@
     <ClCompile Include="Project_game.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\ОтчётКТ2.md" />
     <None Include="ОтчётКТ1.md" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

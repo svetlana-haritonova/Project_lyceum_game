@@ -129,18 +129,150 @@ int main() {
         }
     }
     
-
-    GoToXY(50, 10);
+    x = 50, y = 10;
+    GoToXY(x, y);
     SetConsoleTextAttribute(hStdOut, FOREGROUND_BLUE);
     
+    vector<int> menu_of_options = {5, 6, 7 };
+    active_menu = 0;
+    int option = 0;
+
     if (language == "RUSSIAN") {
         cout << "ВЫБЕРИТЕ РЕЖИМ ИГРЫ";
-        _getch();
+        while (true) {
+            int x = 59, y = 11;
+            GoToXY(x, y);
+            for (int i = 0; i < menu_of_options.size(); ++i) {
+                if (i == active_menu)
+                    SetConsoleTextAttribute(hStdOut, FOREGROUND_GREEN |
+                        FOREGROUND_INTENSITY);
+
+                else SetConsoleTextAttribute(hStdOut,
+
+                    FOREGROUND_GREEN);
+                GoToXY(x, y++);
+                cout << menu_of_options[i] << endl;
+            }
+            ch = _getch();
+
+            if (ch == -32) {
+                ch = _getch(); // Отлавливаем стрелочки // -32 если мы попали на стрелочку
+            }
+            switch (ch) {
+            case 27: //escape
+                exit(0);
+            case 72:
+                if (active_menu > 0) {
+                    --active_menu;
+                }
+                break;
+            case 80:
+                if (active_menu < menu_of_options.size() - 1) {
+                    ++active_menu;
+                }
+                break;
+            case 75:
+                cout << "Left, Код" << (int)ch << endl;
+                break;
+            case 77:
+                cout << "Right, Код" << (int)ch << endl;
+                break;
+
+            case 13:
+                switch (active_menu)
+                {
+                case 0:
+                case 1:
+                case 2:
+                    //system("CLS");
+                   // GoToXY(x, y);
+                   // SetConsoleTextAttribute(hStdOut, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY);
+                    //cout << "Пользователь выбрал \"" << menu_of_languages[active_menu] << "\"";
+                    option = menu_of_options[active_menu];
+                    //_getch();
+                    system("CLS");
+                    break;
+                case 3:
+                    exit(0);
+                }
+                break;
+
+            default:
+                cout << "Код " << (int)ch << endl;
+            }
+            if (option != 0) {
+                break;
+            }
+        }
     }
     else if (language == "ENGLISH") {
         cout << "CHOOSE GAME OPTION";
-        _getch();
+        while (true) {
+            int x = 59, y = 11;
+            GoToXY(x, y);
 
+            for (int i = 0; i < menu_of_options.size(); ++i) {
+                if (i == active_menu)
+                    SetConsoleTextAttribute(hStdOut, FOREGROUND_GREEN |
+                        FOREGROUND_INTENSITY);
+
+                else SetConsoleTextAttribute(hStdOut,
+
+                    FOREGROUND_GREEN);
+                GoToXY(x, y++);
+                cout << menu_of_options[i] << endl;
+            }
+            ch = _getch();
+
+            if (ch == -32) {
+                ch = _getch(); // Отлавливаем стрелочки // -32 если мы попали на стрелочку
+            }
+            switch (ch) {
+            case 27: //escape
+                exit(0);
+            case 72:
+                if (active_menu > 0) {
+                    --active_menu;
+                }
+                break;
+            case 80:
+                if (active_menu < menu_of_options.size() - 1) {
+                    ++active_menu;
+                }
+                break;
+            case 75:
+                cout << "Left, Код" << (int)ch << endl;
+                break;
+            case 77:
+                cout << "Right, Код" << (int)ch << endl;
+                break;
+
+            case 13:
+                switch (active_menu)
+                {
+                case 0:
+                case 1:
+                case 2:
+                    //system("CLS");
+                   // GoToXY(x, y);
+                   // SetConsoleTextAttribute(hStdOut, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY);
+                    //cout << "Пользователь выбрал \"" << menu_of_languages[active_menu] << "\"";
+                    option = menu_of_options[active_menu];
+                    //_getch();
+                    system("CLS");
+                    break;
+                case 3:
+                    exit(0);
+                }
+                break;
+
+            default:
+                cout << "Код " << (int)ch << endl;
+            }
+            if (option != 0) {
+                break;
+            }
+        }
     }
 
 

@@ -108,12 +108,7 @@ int main() {
             {
             case 0:
             case 1:
-                //system("CLS");
-               // GoToXY(x, y);
-               // SetConsoleTextAttribute(hStdOut, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY);
-                //cout << "Пользователь выбрал \"" << menu_of_languages[active_menu] << "\"";
                 language = menu_of_languages[active_menu];
-                //_getch();
                 system("CLS");
                 break;
             case 2:
@@ -184,12 +179,7 @@ int main() {
                 case 0:
                 case 1:
                 case 2:
-                    //system("CLS");
-                   // GoToXY(x, y);
-                   // SetConsoleTextAttribute(hStdOut, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY);
-                    //cout << "Пользователь выбрал \"" << menu_of_languages[active_menu] << "\"";
                     option = menu_of_options[active_menu];
-                    //_getch();
                     system("CLS");
                     break;
                 case 3:
@@ -253,12 +243,7 @@ int main() {
                 case 0:
                 case 1:
                 case 2:
-                    //system("CLS");
-                   // GoToXY(x, y);
-                   // SetConsoleTextAttribute(hStdOut, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY);
-                    //cout << "Пользователь выбрал \"" << menu_of_languages[active_menu] << "\"";
                     option = menu_of_options[active_menu];
-                    //_getch();
                     system("CLS");
                     break;
                 case 3:
@@ -275,43 +260,46 @@ int main() {
         }
     }
 
+    vector<vector<char>> English_keyboard = {
+        {'\n', 'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p'},
+        {' ', 'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', ' '},
+        {' ', ' ', 'z', 'x', 'c', 'v', 'b', 'n', 'm', ' ', ' '}
+    };
+
+
+
+    vector<vector<string>> Russian_keyboard = {
+        {"ё", "й", "ц", "у", "к", "е", "н", "г", "ш", "щ", "з", "х", "ъ"},
+        {" ", "ф", "ы", "в", "а", "п", "р", "о", "л", "д", "ж", "э", " "},
+        {" ", " ", "я", "ч", "с", "м", "и", "т", "ь", "б", "ю", " ", " "}
+    };
+
+    if (option == 5) {
+        if (language == "RUSSIAN") {
+            
+        }
+        else if (language == "ENGLISH") {
+
+        }
+    }
+    else if (option == 6) {
+        if (language == "RUSSIAN") {
+
+        }
+        else if (language == "ENGLISH") {
+
+        }
+    } 
+    else if (option == 7) {
+        if (language == "RUSSIAN") {
+
+        }
+        else if (language == "ENGLISH") {
+
+        }
+    }
 
 
 
 
-        /* int height, width;
-         vector<vector<char>> field(height, vector<char>(width));
-         string answer;
-         std::cout << "choose game language: russian/english" << std::endl << "write choosen language";
-         std::cin >> answer;
-         char letters;
-         if (answer == "russian") {
-             std::cout << "выберите режим игры: слова из 5/6/7 букв" << std::endl << "введите число";
-             std::cin >> letters;
-             switch (letters) {
-             case '5': width = 5;
-                 break;
-             case '6': width = 6;
-                 break;
-             case '7': width = 7;
-                 break;
-             default:
-                 std::cout << "нет такого режима, выберите другой";
-             }
-         }
-         else if (answer == "english") {
-             std::cout << "выберите режим игры: слова из 5/6/7 букв" << std::endl << "введите число";
-             std::cin >> letters;
-             switch (letters) {
-             case '5': width = 5;
-                 break;
-             case '6': width = 6;
-                 break;
-             case '7': width = 7;
-                 break;
-             }
-         }
-         else {
-
-         }*/
     }

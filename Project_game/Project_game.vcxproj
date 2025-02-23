@@ -131,6 +131,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="ОтчётКТ1.md" />
+    <None Include="ОтчётКТ2.md" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

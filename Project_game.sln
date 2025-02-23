@@ -15,11 +15,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "dictionaries", "dictionarie
 		Russian_dictionary_7_letters.txt = Russian_dictionary_7_letters.txt
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Элементы решения", "Элементы решения", "{4DDEB4CC-726C-41A0-932E-8448295C12BC}"
-	ProjectSection(SolutionItems) = preProject
-		ОтчётКТ2.txt = ОтчётКТ2.txt
-	EndProjectSection
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64

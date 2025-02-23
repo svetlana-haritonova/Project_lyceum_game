@@ -4,6 +4,7 @@
 #include <vector>
 #include <string>
 
+
 using std::vector;
 using std::string;
 using std::cout;
@@ -44,6 +45,7 @@ void ConsoleCursorVisible(bool show, short size) {
 
 
 
+
 int main() {
     SetConsoleTitle(L"Игра в слова");
     system("CLS");
@@ -63,19 +65,17 @@ int main() {
     string language = "";
 
 
+
     char ch;
     while (true) {
         int x = 56, y = 12;
         GoToXY(x, y);
 
         for (int i = 0; i < menu_of_languages.size(); ++i) {
-            if (i == active_menu)
-                SetConsoleTextAttribute(hStdOut, FOREGROUND_GREEN |
-                    FOREGROUND_INTENSITY);
-
-            else SetConsoleTextAttribute(hStdOut,
-
-                FOREGROUND_GREEN);
+            if (i == active_menu) {
+                SetConsoleTextAttribute(hStdOut, 2); // зелёный цвет
+            }
+            else SetConsoleTextAttribute(hStdOut, 8); //серый цвет
             GoToXY(x, y++);
             cout << menu_of_languages[i] << endl;
         }
@@ -298,6 +298,8 @@ int main() {
 
         }
     }
+
+
 
 
 

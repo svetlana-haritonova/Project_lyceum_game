@@ -79,8 +79,8 @@ int main() {
     string language = "";
 
 
-
     char ch;
+    
     while (true) {
         int x = 56, y = 12;
         GoToXY(x, y);
@@ -93,7 +93,8 @@ int main() {
             GoToXY(x, y++);
             cout << menu_of_languages[i] << endl;
         }
-        
+       
+        ch = _getch();
         switch (ch) {
         case 27: //escape
             exit(0);
@@ -145,9 +146,7 @@ int main() {
                 if (i == active_menu)
                     SetConsoleTextAttribute(hStdOut, 2);
 
-                else SetConsoleTextAttribute(hStdOut,
-
-                    FOREGROUND_GREEN);
+                else SetConsoleTextAttribute(hStdOut, 8);
                 GoToXY(x, y++);
                 cout << menu_of_options[i] << endl;
             }
@@ -194,12 +193,9 @@ int main() {
 
             for (int i = 0; i < menu_of_options.size(); ++i) {
                 if (i == active_menu)
-                    SetConsoleTextAttribute(hStdOut, FOREGROUND_GREEN |
-                        FOREGROUND_INTENSITY);
+                    SetConsoleTextAttribute(hStdOut, 2);
 
-                else SetConsoleTextAttribute(hStdOut,
-
-                    FOREGROUND_GREEN);
+                else SetConsoleTextAttribute(hStdOut, 8);
                 GoToXY(x, y++);
                 cout << menu_of_options[i] << endl;
             }
@@ -241,9 +237,9 @@ int main() {
     }
 
     vector<vector<string>> English_keyboard = {
-        {" ", "q", "w", "e", "r", "t", " ", "y", "u", "i", "o", "p", " "},
-        {" ", " ", "a", "s", "d", "f", "g", "h", "j", "k", "l", " "},
-        {" ", " ", " ", "z", "x", "c", "v", "b", "n", "m", " ", " "}
+        {"q", "w", "e", "r", "t", "y", "u", "i", "o", "p"},
+        {" ", "a", "s", "d", "f", "g", "h", "j", "k", "l"},
+        {" ", " ", "z", "x", "c", "v", "b", "n", "m", " "}
     };
 
 

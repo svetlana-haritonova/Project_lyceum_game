@@ -9,6 +9,7 @@ using std::vector;
 using std::string;
 using std::cout;
 using std::endl;
+using std::min;
 
 void reading_files() {
 
@@ -18,9 +19,6 @@ void start() {
 
 }
 
-void create_field(int height, int width) {
-    vector<vector<char>> field(height, vector<char>(width));
-}
 
 
 void print_field(vector<vector<char>> field) {
@@ -33,11 +31,27 @@ void GoToXY(short x, short y) {
     SetConsoleCursorPosition(hStdOut, {x, y});
 }
 
+void create_field(int height, int width, int x, int y) {
+    vector<vector<char>> field(height, vector<char>(width));
+    GoToXY(x, y);
+    for (int i = 0; i < height; ++i) {
+        for (int j = 0; j < width; ++j) {
+            cout << "_______________________________";
+            GoToXY(x, y);
+            cout << "|     |     |     |     |     |";
+            GoToXY(x, y);
+            cout << "|  " << field[i][j]; "  ";
+        }
+        cout << "|";
+    }
+}
+
+
 void ConsoleCursorVisible(bool show, short size) {
     CONSOLE_CURSOR_INFO structCursorInfo;
     GetConsoleCursorInfo(hStdOut, &structCursorInfo);
-    structCursorInfo.bVisible = show; // изменяем видимость курсора
-    structCursorInfo.dwSize = size; // изменяем размер курсора
+    structCursorInfo.bVisible = show; // убираем видимость курсора
+    structCursorInfo.dwSize = size; // редактирование размер курсора
     SetConsoleCursorInfo(hStdOut, &structCursorInfo);
 }
 
@@ -126,7 +140,7 @@ int main() {
     
     x = 50, y = 10;
     GoToXY(x, y);
-    SetConsoleTextAttribute(hStdOut, FOREGROUND_BLUE);
+    SetConsoleTextAttribute(hStdOut, 1); //синий
     
     vector<int> menu_of_options = {5, 6, 7 };
     active_menu = 0;
@@ -135,12 +149,11 @@ int main() {
     if (language == "RUSSIAN") {
         cout << "ВЫБЕРИТЕ РЕЖИМ ИГРЫ";
         while (true) {
-            int x = 59, y = 11;
+            x = 59, y = 11;
             GoToXY(x, y);
             for (int i = 0; i < menu_of_options.size(); ++i) {
                 if (i == active_menu)
-                    SetConsoleTextAttribute(hStdOut, FOREGROUND_GREEN |
-                        FOREGROUND_INTENSITY);
+                    SetConsoleTextAttribute(hStdOut, 2);
 
                 else SetConsoleTextAttribute(hStdOut,
 
@@ -150,9 +163,6 @@ int main() {
             }
             ch = _getch();
 
-            if (ch == -32) {
-                ch = _getch(); // Отлавливаем стрелочки // -32 если мы попали на стрелочку
-            }
             switch (ch) {
             case 27: //escape
                 exit(0);
@@ -165,12 +175,6 @@ int main() {
                 if (active_menu < menu_of_options.size() - 1) {
                     ++active_menu;
                 }
-                break;
-            case 75:
-                cout << "Left, Код" << (int)ch << endl;
-                break;
-            case 77:
-                cout << "Right, Код" << (int)ch << endl;
                 break;
 
             case 13:
@@ -186,9 +190,6 @@ int main() {
                     exit(0);
                 }
                 break;
-
-            default:
-                cout << "Код " << (int)ch << endl;
             }
             if (option != 0) {
                 break;
@@ -214,9 +215,6 @@ int main() {
             }
             ch = _getch();
 
-            if (ch == -32) {
-                ch = _getch(); // Отлавливаем стрелочки // -32 если мы попали на стрелочку
-            }
             switch (ch) {
             case 27: //escape
                 exit(0);
@@ -229,12 +227,6 @@ int main() {
                 if (active_menu < menu_of_options.size() - 1) {
                     ++active_menu;
                 }
-                break;
-            case 75:
-                cout << "Left, Код" << (int)ch << endl;
-                break;
-            case 77:
-                cout << "Right, Код" << (int)ch << endl;
                 break;
 
             case 13:
@@ -250,10 +242,8 @@ int main() {
                     exit(0);
                 }
                 break;
-
-            default:
-                cout << "Код " << (int)ch << endl;
             }
+
             if (option != 0) {
                 break;
             }
@@ -274,34 +264,119 @@ int main() {
         {" ", " ", "я", "ч", "с", "м", "и", "т", "ь", "б", "ю", " ", " "}
     };
 
-    if (option == 5) {
+
+   
+
+    int row = 0;
+    int column = 0;
+    string letter = " ";
+
+
         if (language == "RUSSIAN") {
+            
+            while(true) {
+                    system("CLS");
+                    for (int i = 0; i < Russian_keyboard.size(); ++i) {
+                        for (int j = 0; j < Russian_keyboard[i].size(); ++j) {
+                            GoToXY(40 + j * 3, 20 + i * 2); //j * 3 чтобы было расстояние для буквы и скобки, i * 2 опускаемся вниз
+                            if (Russian_keyboard[i][j] != " ") {
+                                if (i == row && j == column) {
+                                    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 8);
+                                    cout << "[";
+                                    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 2);
+                                    cout << Russian_keyboard[i][j];
+                                    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 8);
+                                    cout << "]";
+                                }
+                                else {
+                                    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 8);
+                                    cout << "[" << Russian_keyboard[i][j] << "]";
+                                }
+                            }
+                            else {
+                                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 8);
+                                cout << Russian_keyboard[i][j];
+                            }
+                        }
+                        cout << endl;
+                    }
+                    GoToXY(0, Russian_keyboard.size() * 2 + 1);
+                    //cout << "Выбрана буква: " << letter << endl;
+                   // SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 8);
+                    int ch = _getch();
+
+                    switch (ch) {
+                    case 72: // Up arrow
+                        if (row > 0 && Russian_keyboard[row][column] != " ") {
+                            --row;
+                        }
+                        break;
+                    case 80: // Down arrow
+                        if (row < Russian_keyboard.size() - 1) {
+                            ++row;
+                            int min = min(column, Russian_keyboard[0].size() - column); //минимальное рассояние; смотрим в каком конце клавиатуры находимся
+                            if (Russian_keyboard[row][column] == " ") {
+                                if (min == column) {
+                                    while (Russian_keyboard[row][column] == " " && column < Russian_keyboard[0].size() - 1) {
+                                        ++column;
+                                    }
+                                }
+                                else if (min == Russian_keyboard[0].size() - column) {
+                                    while (Russian_keyboard[row][column] == " " && column > 0) {
+                                        --column;
+                                    }
+                                }
+                            }
+                        }
+
+
+                        break;
+                    case 75: // лево
+                        if (column > 0) {
+                            --column;
+                            if (Russian_keyboard[row][column] == " ") {
+                                ++column;
+                            }
+                        }
+                        break;
+                    case 77: // право
+                        if (column < Russian_keyboard[0].size() - 1 && Russian_keyboard[row][column] != " ") {
+                            ++column;
+                            if (Russian_keyboard[row][column] == " ") {
+                                --column;
+                            }
+                        }
+                        break;
+                    case 13: // Enter
+                        //  letter = Russian_keyboard[row][column];
+                        break;
+                    case 27: // Escape
+                        return 0;
+                    }
+                }
+               
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
             
         }
         else if (language == "ENGLISH") {
+            
 
         }
-    }
-    else if (option == 6) {
-        if (language == "RUSSIAN") {
-
-        }
-        else if (language == "ENGLISH") {
-
-        }
-    } 
-    else if (option == 7) {
-        if (language == "RUSSIAN") {
-
-        }
-        else if (language == "ENGLISH") {
-
-        }
-    }
-
-
-
-
+    
 
 
     }

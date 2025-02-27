@@ -93,10 +93,7 @@ int main() {
             GoToXY(x, y++);
             cout << menu_of_languages[i] << endl;
         }
-        ch = _getch();
-        if (ch == -32) {
-            ch = _getch(); // Отлавливаем стрелочки // -32 если мы попали на стрелочку
-        }
+        
         switch (ch) {
         case 27: //escape
             exit(0);
@@ -110,13 +107,7 @@ int main() {
                 ++active_menu;
             }
             break;
-        case 75:
-            cout << "Left, Код" << (int)ch << endl;
-            break;
-        case 77:
-            cout << "Right, Код" << (int)ch << endl;
-            break;
-
+       
         case 13:
             switch (active_menu)
             {
@@ -130,8 +121,7 @@ int main() {
             }
             break;
 
-        default:
-            cout << "Код " << (int)ch << endl;
+        
         }
         if (language != "") {
             break;

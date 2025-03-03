@@ -31,21 +31,10 @@ void GoToXY(short x, short y) {
     SetConsoleCursorPosition(hStdOut, {x, y});
 }
 
-void create_field(int height, int width, int x, int y) {
-    vector<vector<char>> field(height, vector<char>(width));
-    GoToXY(x, y);
-    for (int i = 0; i < height; ++i) {
-        for (int j = 0; j < width; ++j) {
-            cout << "_______________________________";
-            GoToXY(x, y);
-            cout << "|     |     |     |     |     |";
-            GoToXY(x, y);
-            cout << "|  " << field[i][j]; "  ";
-        }
-        cout << "|";
-    }
+vector<vector<string>> create_vector(int height, int width) {
+    vector<vector<string>> field(height, vector<string>(width));
+    return field;
 }
-
 
 void ConsoleCursorVisible(bool show, short size) {
     CONSOLE_CURSOR_INFO structCursorInfo;
@@ -53,6 +42,38 @@ void ConsoleCursorVisible(bool show, short size) {
     structCursorInfo.bVisible = show; // убираем видимость курсора
     structCursorInfo.dwSize = size; // редактирование размер курсора
     SetConsoleCursorInfo(hStdOut, &structCursorInfo);
+}
+
+void create_field(int x, int y, vector<vector<std::string>> field) {
+    int const_x = x;
+    GoToXY(const_x, y);
+    cout << "|_____|_____|_____|_____|_____|";
+    --y;
+    for (int i = 0; i < field.size(); ++i) {
+
+        for (int j = 0; j < field[0].size(); ++j) {
+            GoToXY(x, y);
+            cout << "|  " << field[i][j] << "  ";
+            x = x + 6;
+        }
+        GoToXY(x, y);
+        cout << "|" << std::endl;
+        --y;
+        x = const_x;
+        GoToXY(x, y);
+        cout << "|     |     |     |     |     |";
+        --y;
+        if (i == field.size() - 1) {
+            GoToXY(const_x, y);
+            cout << "_______________________________";
+            --y;
+        }
+        else {
+            GoToXY(const_x, y);
+            cout << "|_____|_____|_____|_____|_____|";
+            --y;
+        }
+    }
 }
 
 
@@ -257,14 +278,15 @@ int main() {
     int column = 0;
     string letter = " ";
 
-
+    vector<vector<string>> field;
         if (language == "RUSSIAN") {
-            
+            field = create_vector(5, 5);
             while(true) {
                     system("CLS");
+                    create_field(50, 20, field);
                     for (int i = 0; i < Russian_keyboard.size(); ++i) {
                         for (int j = 0; j < Russian_keyboard[i].size(); ++j) {
-                            GoToXY(40 + j * 3, 20 + i * 2); //j * 3 чтобы было расстояние для буквы и скобки, i * 2 опускаемся вниз
+                            GoToXY(47 + j * 3, 23 + i * 2); //j * 3 чтобы было расстояние для буквы и скобки, i * 2 опускаемся вниз
                             if (Russian_keyboard[i][j] != " ") {
                                 if (i == row && j == column) {
                                     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 8);

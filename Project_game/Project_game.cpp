@@ -356,7 +356,7 @@ int main() {
                         }
                         break;
                     case 13: // Enter
-                        //  letter =  [row][column];
+                        field[0][0] = Russian_keyboard[row][column];
                         break;
                     case 27: // Escape
                         return 0;

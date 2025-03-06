@@ -2,38 +2,43 @@
 #include <windows.h>
 #include <conio.h>
 #include <vector>
+#include <fstream>
 #include <string>
+#include <sstream>
 
 
 using std::vector;
+using std::fstream;
 using std::string;
 using std::cout;
 using std::endl;
 using std::min;
 
-void reading_files() {
-
+int randint(int from, int to) {
+    return from + (rand() % (to - from));
 }
 
-void start() {
-
-}
-
-
-
-void print_field(vector<vector<char>> field) {
-
+string get_random_word(string filename) {
+    fstream file;
+    file.open(filename);
+    string sentence, word;
+    vector<string> words;
+    while (!file.eof()) {
+        std::getline(file, sentence);
+        std::stringstream text(sentence);
+        while (!text.eof()) {
+            text >> word;
+            words.push_back(word);
+        }
+    }
+    int i = randint(0, word.size() - 1);
+    return words[i];
 }
 
 HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
 
 void GoToXY(short x, short y) {
-    SetConsoleCursorPosition(hStdOut, {x, y});
-}
-
-vector<vector<string>> create_vector(int height, int width) {
-    vector<vector<string>> field(height, vector<string>(width));
-    return field;
+    SetConsoleCursorPosition(hStdOut, { x, y });
 }
 
 void ConsoleCursorVisible(bool show, short size) {
@@ -44,39 +49,48 @@ void ConsoleCursorVisible(bool show, short size) {
     SetConsoleCursorInfo(hStdOut, &structCursorInfo);
 }
 
-void create_field(int x, int y, vector<vector<std::string>> field) {
-    int const_x = x;
-    GoToXY(const_x, y);
-    cout << "|_____|_____|_____|_____|_____|";
-    --y;
-    for (int i = 0; i < field.size(); ++i) {
+vector<vector<string>> create_field(int height, int width) {
+    vector<vector<string>> field(height, vector<string>(width));
+    return field;
+}
 
+void print_field(int x, int y, vector<vector<std::string>> field) {
+    int const_x = x;
+    for (int i = 0; i <= field.size(); ++i) {
+        GoToXY(x, y);
+        cout << "______";
+        x = x + 5;
+    }
+    x = const_x;
+    ++y;
+    for (int i = 0; i < field.size(); ++i) {
         for (int j = 0; j < field[0].size(); ++j) {
+            GoToXY(x, y);
+            cout << "|     ";
+            ++y;
             GoToXY(x, y);
             cout << "|  " << field[i][j] << "  ";
             x = x + 6;
+            --y;
         }
         GoToXY(x, y);
-        cout << "|" << std::endl;
-        --y;
+        cout << "|";
+        ++y;
+        GoToXY(x, y);
+        cout << "|";
+        ++y;
         x = const_x;
+        for (int l = 0; l < field.size(); ++l) {
+            GoToXY(x, y);
+            cout << "|_____";
+            x = x + 6;
+        }
         GoToXY(x, y);
-        cout << "|     |     |     |     |     |";
-        --y;
-        if (i == field.size() - 1) {
-            GoToXY(const_x, y);
-            cout << "_______________________________";
-            --y;
-        }
-        else {
-            GoToXY(const_x, y);
-            cout << "|_____|_____|_____|_____|_____|";
-            --y;
-        }
+        cout << "|";
+        ++y;
+        x = const_x;
     }
 }
-
-
 
 
 
@@ -191,7 +205,13 @@ int main() {
                 switch (active_menu)
                 {
                 case 0:
+                    option = menu_of_options[active_menu];
+                    system("CLS");
+                    break;
                 case 1:
+                    option = menu_of_options[active_menu];
+                    system("CLS");
+                    break;
                 case 2:
                     option = menu_of_options[active_menu];
                     system("CLS");
@@ -240,7 +260,13 @@ int main() {
                 switch (active_menu)
                 {
                 case 0:
+                    option = menu_of_options[active_menu];
+                    system("CLS");
+                    break;
                 case 1:
+                    option = menu_of_options[active_menu];
+                    system("CLS");
+                    break;
                 case 2:
                     option = menu_of_options[active_menu];
                     system("CLS");
@@ -258,17 +284,17 @@ int main() {
     }
 
     vector<vector<string>> English_keyboard = {
-        {"q", "w", "e", "r", "t", "y", "u", "i", "o", "p"},
-        {" ", "a", "s", "d", "f", "g", "h", "j", "k", "l"},
-        {" ", " ", "z", "x", "c", "v", "b", "n", "m", " "}
+        {"@", "q", "w", "e", "r", "t", "y", "u", "i", "o", "p", "<"},
+        {" ", " ", "a", "s", "d", "f", "g", "h", "j", "k", "l", " "},
+        {" ", " ", " ", "z", "x", "c", "v", "b", "n", "m", " ", " "}
     };
 
 
 
     vector<vector<string>> Russian_keyboard = {
-        {"ё", "й", "ц", "у", "к", "е", "н", "г", "ш", "щ", "з", "х", "ъ"},
-        {" ", "ф", "ы", "в", "а", "п", "р", "о", "л", "д", "ж", "э", " "},
-        {" ", " ", "я", "ч", "с", "м", "и", "т", "ь", "б", "ю", " ", " "}
+        {"@", "ё", "й", "ц", "у", "к", "е", "н", "г", "ш", "щ", "з", "х", "ъ", "<"},
+        {" ", " ", "ф", "ы", "в", "а", "п", "р", "о", "л", "д", "ж", "э", " ", " "},
+        {" ", " ", " ", "я", "ч", "с", "м", "и", "т", "ь", "б", "ю", " ", " ", " "}
     };
 
 
@@ -276,17 +302,19 @@ int main() {
 
     int row = 0;
     int column = 0;
+    int field_row = 0;
+    int field_column = 0;
     string letter = " ";
 
     vector<vector<string>> field;
         if (language == "RUSSIAN") {
-            field = create_vector(5, 5);
+            field = create_field(5, 5);
             while(true) {
                     system("CLS");
-                    create_field(50, 20, field);
+                    print_field(50, 5, field);
                     for (int i = 0; i < Russian_keyboard.size(); ++i) {
                         for (int j = 0; j < Russian_keyboard[i].size(); ++j) {
-                            GoToXY(47 + j * 3, 23 + i * 2); //j * 3 чтобы было расстояние для буквы и скобки, i * 2 опускаемся вниз
+                            GoToXY(45 + j * 3, 23 + i * 2); //j * 3 чтобы было расстояние для буквы и скобки, i * 2 опускаемся вниз
                             if (Russian_keyboard[i][j] != " ") {
                                 if (i == row && j == column) {
                                     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 8);
@@ -356,7 +384,22 @@ int main() {
                         }
                         break;
                     case 13: // Enter
-                        field[0][0] = Russian_keyboard[row][column];
+                        if (Russian_keyboard[row][column] == "<" && field_column != 0) {
+                            field[field_row][field_column] = " ";
+                        }
+                        else if (Russian_keyboard[row][column] == "@") {
+                            if (field_row != field.size() - 1) {
+                                ++field_row;
+                                field_column = 0;
+                            }
+                        }
+                        else if (field_column != field[0].size() - 1) {
+                            field[field_row][field_column] = Russian_keyboard[row][column];
+                            ++field_column;
+                        }
+                        else {
+                            field[field_row][field_column] = Russian_keyboard[row][column];
+                        }
                         break;
                     case 27: // Escape
                         return 0;

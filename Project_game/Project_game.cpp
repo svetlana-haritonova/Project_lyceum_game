@@ -102,7 +102,7 @@ void print_field(int x, int y, vector<vector<std::string>> field) {
     }
 }
 
-void print_keyboard(int x, int y, vector<vector<string>> keyboard, vector<vector<string>> &field, 
+void print_keyboard(int x, int y, vector<vector<string>> keyboard, vector<vector<string>> &field, string hidden_word, 
     int &row, int &column, int &field_row, int &field_column) {
     for (int i = 0; i < keyboard.size(); ++i) {
         for (int j = 0; j < keyboard[i].size(); ++j) {
@@ -165,7 +165,13 @@ void print_keyboard(int x, int y, vector<vector<string>> keyboard, vector<vector
         break;
     case ENTER: //enter
         if (keyboard[row][column] == "<" && field_column != 0) {
-            field[field_row][field_column] = " ";
+            if (field[field_row][field_column] == " ") {
+                --field_column;
+                field[field_row][field_column] = " ";
+            }
+            else {
+                field[field_row][field_column] = " ";
+            }
         }
         else if (keyboard[row][column] == "@") {
             if (field_row != field.size() - 1) {
@@ -356,21 +362,37 @@ int main() {
     int column = 0;
     int field_row = 0;
     int field_column = 0;
-    string letter = "";
+    string hidden_word, letter = "";
     vector<vector<string>> field = create_field(option, option);
 
         if (language == "RUSSIAN") {
+            /*switch (option) {
+            case 5:
+                hidden_word = get_random_word("Russian_dicrionary_5_letters.txt");
+            case 6:
+                hidden_word = get_random_word("Russian_dicrionary_6_letters.txt");
+            case 7:
+                hidden_word = get_random_word("Russian_dicrionary_7_letters.txt");
+            }*/
             while(true) {
                 system("CLS");
                 print_field(50, 5, field);
-                print_keyboard(49, option * 3 + 7, Russian_keyboard, field, row, column, field_row, field_column);
+                print_keyboard(49, option * 3 + 7, Russian_keyboard, field, hidden_word, row, column, field_row, field_column);
             }
         }
-        else if (language == "ENGLISH") { 
+        else if (language == "ENGLISH") {
+            /*switch (option) {
+            case 5:
+                hidden_word = get_random_word("English_dicrionary_5_letters.txt");
+            case 6:
+                hidden_word = get_random_word("English_dicrionary_6_letters.txt");
+            case 7:
+                hidden_word = get_random_word("English_dicrionary_7_letters.txt");
+            }*/
             while (true) {
                 system("CLS");
                 print_field(50, 5, field);
-                print_keyboard(49, option * 3 + 7, English_keyboard, field, row, column, field_row, field_column);
+                print_keyboard(49, option * 3 + 7, English_keyboard, field, hidden_word, row, column, field_row, field_column);
             }
         }
 }

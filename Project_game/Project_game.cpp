@@ -6,13 +6,19 @@
 #include <string>
 #include <sstream>
 
-
 using std::vector;
 using std::fstream;
 using std::string;
 using std::cout;
 using std::endl;
 using std::min;
+
+const char UP = 72;
+const char DOWN = 80;
+const char LEFT = 75;
+const char RIGHT = 77;
+const char ENTER = 13;
+const char ESCAPE = 27;
 
 int randint(int from, int to) {
     return from + (rand() % (to - from));
@@ -55,11 +61,15 @@ vector<vector<string>> create_field(int height, int width) {
 }
 
 void print_field(int x, int y, vector<vector<std::string>> field) {
+    SetConsoleTextAttribute(hStdOut, 8);
     int const_x = x;
-    for (int i = 0; i <= field.size(); ++i) {
+    GoToXY(x, y);
+    cout << "_";
+    ++x;
+    for (int i = 0; i < field.size(); ++i) {
         GoToXY(x, y);
         cout << "______";
-        x = x + 5;
+        x = x + 6;
     }
     x = const_x;
     ++y;
@@ -89,6 +99,90 @@ void print_field(int x, int y, vector<vector<std::string>> field) {
         cout << "|";
         ++y;
         x = const_x;
+    }
+}
+
+void print_keyboard(int x, int y, vector<vector<string>> keyboard, vector<vector<string>> &field, 
+    int &row, int &column, int &field_row, int &field_column) {
+    for (int i = 0; i < keyboard.size(); ++i) {
+        for (int j = 0; j < keyboard[i].size(); ++j) {
+            GoToXY(x + j * 3, y + i * 2); //j * 3 чтобы было расстояние для буквы и скобки, i * 2 опускаемся вниз
+            if (keyboard[i][j] != " ") {
+                if (i == row && j == column) {
+                    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 2);
+                    cout << "[" << keyboard[i][j] << "]";
+                }
+                else {
+                    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 8);
+                    cout << "[" << keyboard[i][j] << "]";
+                }
+            }
+        }
+        cout << endl;
+    }
+    GoToXY(0, keyboard.size() * 2 + 1);
+    int ch = _getch();
+
+    switch (ch) {
+    case UP: //стрелочка вверх 
+        if (row > 0 && keyboard[row][column] != " ") {
+            --row;
+        }
+        break;
+    case DOWN: //стрелочка вниз
+        if (row < keyboard.size() - 1) {
+            ++row;
+            int min = min(column, keyboard[0].size() - column); //минимальное рассояние; смотрим в каком конце клавиатуры находимся
+            if (keyboard[row][column] == " ") {
+                if (min == column) {
+                    while (keyboard[row][column] == " " && column < keyboard[0].size() - 1) {
+                        ++column;
+                    }
+                }
+                else if (min == keyboard[0].size() - column) {
+                    while (keyboard[row][column] == " " && column > 0) {
+                        --column;
+                    }
+                }
+            }
+        }
+        break;
+    case LEFT: //стрелочка лево
+        if (column > 0) {
+            --column;
+            if (keyboard[row][column] == " ") {
+                ++column;
+            }
+        }
+        break;
+    case RIGHT: //стрелочка право
+        if (column < keyboard[0].size() - 1 && keyboard[row][column] != " ") {
+            ++column;
+            if (keyboard[row][column] == " ") {
+                --column;
+            }
+        }
+        break;
+    case ENTER: //enter
+        if (keyboard[row][column] == "<" && field_column != 0) {
+            field[field_row][field_column] = " ";
+        }
+        else if (keyboard[row][column] == "@") {
+            if (field_row != field.size() - 1) {
+                ++field_row;
+                field_column = 0;
+            }
+        }
+        else if (field_column != field[0].size() - 1) {
+            field[field_row][field_column] = keyboard[row][column];
+            ++field_column;
+        }
+        else {
+            field[field_row][field_column] = keyboard[row][column];
+        }
+        break;
+    case ESCAPE: //escape
+        return;
     }
 }
 
@@ -128,36 +222,25 @@ int main() {
             GoToXY(x, y++);
             cout << menu_of_languages[i] << endl;
         }
-       
+
         ch = _getch();
         switch (ch) {
-        case 27: //escape
+        case ESCAPE:
             exit(0);
-        case 72:
+        case UP:
             if (active_menu > 0) {
                 --active_menu;
             }
             break;
-        case 80:
+        case DOWN:
             if (active_menu < menu_of_languages.size() - 1) {
                 ++active_menu;
             }
             break;
-       
-        case 13:
-            switch (active_menu)
-            {
-            case 0:
-            case 1:
-                language = menu_of_languages[active_menu];
-                system("CLS");
-                break;
-            case 2:
-                exit(0);
-            }
+        case ENTER:
+            language = menu_of_languages[active_menu];
+            system("CLS");
             break;
-
-        
         }
         if (language != "") {
             break;
@@ -178,9 +261,9 @@ int main() {
             x = 59, y = 11;
             GoToXY(x, y);
             for (int i = 0; i < menu_of_options.size(); ++i) {
-                if (i == active_menu)
+                if (i == active_menu) {
                     SetConsoleTextAttribute(hStdOut, 2);
-
+                }
                 else SetConsoleTextAttribute(hStdOut, 8);
                 GoToXY(x, y++);
                 cout << menu_of_options[i] << endl;
@@ -188,37 +271,22 @@ int main() {
             ch = _getch();
 
             switch (ch) {
-            case 27: //escape
+            case ESCAPE: //escape
                 exit(0);
-            case 72:
+            case UP:
                 if (active_menu > 0) {
                     --active_menu;
                 }
                 break;
-            case 80:
+            case DOWN:
                 if (active_menu < menu_of_options.size() - 1) {
                     ++active_menu;
                 }
                 break;
 
-            case 13:
-                switch (active_menu)
-                {
-                case 0:
-                    option = menu_of_options[active_menu];
-                    system("CLS");
-                    break;
-                case 1:
-                    option = menu_of_options[active_menu];
-                    system("CLS");
-                    break;
-                case 2:
-                    option = menu_of_options[active_menu];
-                    system("CLS");
-                    break;
-                case 3:
-                    exit(0);
-                }
+            case ENTER:
+                option = menu_of_options[active_menu];
+                system("CLS");
                 break;
             }
             if (option != 0) {
@@ -233,9 +301,9 @@ int main() {
             GoToXY(x, y);
 
             for (int i = 0; i < menu_of_options.size(); ++i) {
-                if (i == active_menu)
+                if (i == active_menu) {
                     SetConsoleTextAttribute(hStdOut, 2);
-
+                }
                 else SetConsoleTextAttribute(hStdOut, 8);
                 GoToXY(x, y++);
                 cout << menu_of_options[i] << endl;
@@ -243,40 +311,24 @@ int main() {
             ch = _getch();
 
             switch (ch) {
-            case 27: //escape
+            case ESCAPE: //escape
                 exit(0);
-            case 72:
+            case UP:
                 if (active_menu > 0) {
                     --active_menu;
                 }
                 break;
-            case 80:
+            case DOWN:
                 if (active_menu < menu_of_options.size() - 1) {
                     ++active_menu;
                 }
                 break;
 
-            case 13:
-                switch (active_menu)
-                {
-                case 0:
-                    option = menu_of_options[active_menu];
-                    system("CLS");
-                    break;
-                case 1:
-                    option = menu_of_options[active_menu];
-                    system("CLS");
-                    break;
-                case 2:
-                    option = menu_of_options[active_menu];
-                    system("CLS");
-                    break;
-                case 3:
-                    exit(0);
-                }
+            case ENTER:
+                option = menu_of_options[active_menu];
+                system("CLS");
                 break;
             }
-
             if (option != 0) {
                 break;
             }
@@ -304,200 +356,21 @@ int main() {
     int column = 0;
     int field_row = 0;
     int field_column = 0;
-    string letter = " ";
+    string letter = "";
+    vector<vector<string>> field = create_field(option, option);
 
-    vector<vector<string>> field;
         if (language == "RUSSIAN") {
-            field = create_field(5, 5);
             while(true) {
-                    system("CLS");
-                    print_field(50, 5, field);
-                    for (int i = 0; i < Russian_keyboard.size(); ++i) {
-                        for (int j = 0; j < Russian_keyboard[i].size(); ++j) {
-                            GoToXY(45 + j * 3, 23 + i * 2); //j * 3 чтобы было расстояние для буквы и скобки, i * 2 опускаемся вниз
-                            if (Russian_keyboard[i][j] != " ") {
-                                if (i == row && j == column) {
-                                    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 8);
-                                    cout << "[";
-                                    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 2);
-                                    cout << Russian_keyboard[i][j];
-                                    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 8);
-                                    cout << "]";
-                                }
-                                else {
-                                    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 8);
-                                    cout << "[" << Russian_keyboard[i][j] << "]";
-                                }
-                            }
-                            else {
-                                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 8);
-                                cout << Russian_keyboard[i][j];
-                            }
-                        }
-                        cout << endl;
-                    }
-                    GoToXY(0, Russian_keyboard.size() * 2 + 1);
-                    //cout << "Выбрана буква: " << letter << endl;
-                   // SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 8);
-                    int ch = _getch();
-
-                    switch (ch) {
-                    case 72: // Up arrow
-                        if (row > 0 && Russian_keyboard[row][column] != " ") {
-                            --row;
-                        }
-                        break;
-                    case 80: // Down arrow
-                        if (row < Russian_keyboard.size() - 1) {
-                            ++row;
-                            int min = min(column, Russian_keyboard[0].size() - column); //минимальное рассояние; смотрим в каком конце клавиатуры находимся
-                            if (Russian_keyboard[row][column] == " ") {
-                                if (min == column) {
-                                    while (Russian_keyboard[row][column] == " " && column < Russian_keyboard[0].size() - 1) {
-                                        ++column;
-                                    }
-                                }
-                                else if (min == Russian_keyboard[0].size() - column) {
-                                    while (Russian_keyboard[row][column] == " " && column > 0) {
-                                        --column;
-                                    }
-                                }
-                            }
-                        }
-
-
-                        break;
-                    case 75: // лево
-                        if (column > 0) {
-                            --column;
-                            if (Russian_keyboard[row][column] == " ") {
-                                ++column;
-                            }
-                        }
-                        break;
-                    case 77: // право
-                        if (column < Russian_keyboard[0].size() - 1 && Russian_keyboard[row][column] != " ") {
-                            ++column;
-                            if (Russian_keyboard[row][column] == " ") {
-                                --column;
-                            }
-                        }
-                        break;
-                    case 13: // Enter
-                        if (Russian_keyboard[row][column] == "<" && field_column != 0) {
-                            field[field_row][field_column] = " ";
-                        }
-                        else if (Russian_keyboard[row][column] == "@") {
-                            if (field_row != field.size() - 1) {
-                                ++field_row;
-                                field_column = 0;
-                            }
-                        }
-                        else if (field_column != field[0].size() - 1) {
-                            field[field_row][field_column] = Russian_keyboard[row][column];
-                            ++field_column;
-                        }
-                        else {
-                            field[field_row][field_column] = Russian_keyboard[row][column];
-                        }
-                        break;
-                    case 27: // Escape
-                        return 0;
-                    }
-                }
-               
-
-
-
-
-
-
-            
+                system("CLS");
+                print_field(50, 5, field);
+                print_keyboard(49, option * 3 + 7, Russian_keyboard, field, row, column, field_row, field_column);
+            }
         }
         else if (language == "ENGLISH") { 
             while (true) {
                 system("CLS");
-                for (int i = 0; i < English_keyboard.size(); ++i) {
-                    for (int j = 0; j < English_keyboard[i].size(); ++j) {
-                        GoToXY(40 + j * 3, 20 + i * 2); //j * 3 чтобы было расстояние для буквы и скобки, i * 2 опускаемся вниз
-                        if (English_keyboard[i][j] != " ") {
-                            if (i == row && j == column) {
-                                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 8);
-                                cout << "[";
-                                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 2);
-                                cout << English_keyboard[i][j];
-                                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 8);
-                                cout << "]";
-                            }
-                            else {
-                                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 8);
-                                cout << "[" << English_keyboard[i][j] << "]";
-                            }
-                        }
-                        else {
-                            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 8);
-                            cout << English_keyboard[i][j];
-                        }
-                    }
-                    cout << endl;
-                }
-                GoToXY(0, English_keyboard.size() * 2 + 1);
-                //cout << "Выбрана буква: " << letter << endl;
-               // SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 8);
-                int ch = _getch();
-
-                switch (ch) {
-                case 72: // Up arrow
-                    if (row > 0 && English_keyboard[row][column] != " ") {
-                        --row;
-                    }
-                    break;
-                case 80: // Down arrow
-                    if (row < English_keyboard.size() - 1) {
-                        ++row;
-                        int min = min(column, English_keyboard[0].size() - column); //минимальное рассояние; смотрим в каком конце клавиатуры находимся
-                        if (English_keyboard[row][column] == " ") {
-                            if (min == column) {
-                                while (English_keyboard[row][column] == " " && column < English_keyboard[0].size() - 1) {
-                                    ++column;
-                                }
-                            }
-                            else if (min == English_keyboard[0].size() - column) {
-                                while (English_keyboard[row][column] == " " && column > 0) {
-                                    --column;
-                                }
-                            }
-                        }
-                    }
-
-
-                    break;
-                case 75: // лево
-                    if (column > 0) {
-                        --column;
-                        if (English_keyboard[row][column] == " ") {
-                            ++column;
-                        }
-                    }
-                    break;
-                case 77: // право
-                    if (column < English_keyboard[0].size() - 1 && English_keyboard[row][column] != " ") {
-                        ++column;
-                        if (English_keyboard[row][column] == " ") {
-                            --column;
-                        }
-                    }
-                    break;
-                case 13: // Enter
-                    //  letter = English_keyboard[row][column];
-                    break;
-                case 27: // Escape
-                    return 0;
-                }
+                print_field(50, 5, field);
+                print_keyboard(49, option * 3 + 7, English_keyboard, field, row, column, field_row, field_column);
             }
-
         }
-    
-
-
-    }
+}

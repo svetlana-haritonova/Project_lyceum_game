@@ -13,14 +13,14 @@ using std::cout;
 using std::endl;
 using std::min;
 
-const char UP = 72;
+const char UP = 72; //клавишы на клавиатуре и их код
 const char DOWN = 80;
 const char LEFT = 75;
 const char RIGHT = 77;
 const char ENTER = 13;
 const char ESCAPE = 27;
 
-int randint(int from, int to) {
+int randint(int from, int to) { //функция для выбора рандомной цифры в диапазоне
     return from + (rand() % (to - from));
 }
 
@@ -29,7 +29,7 @@ string get_random_word(string filename) {
     file.open(filename);
     string sentence, word;
     vector<string> words;
-    while (!file.eof()) {
+    while (!file.eof()) { //записывание в вектор слов пока не достигнут конец файла
         std::getline(file, sentence);
         std::stringstream text(sentence);
         while (!text.eof()) {
@@ -37,30 +37,30 @@ string get_random_word(string filename) {
             words.push_back(word);
         }
     }
-    int i = randint(0, word.size() - 1);
+    int i = randint(0, word.size() - 1); //выбор рандомного индекса в векторе и возвращения слова под этим индексом
     return words[i];
 }
 
-HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
+HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE); //получаем дескриптор консоли, чтобы работать с ней
 
-void GoToXY(short x, short y) {
+void GoToXY(short x, short y) { //перемещение курсора на позицию (x, y)
     SetConsoleCursorPosition(hStdOut, { x, y });
 }
 
 void ConsoleCursorVisible(bool show, short size) {
-    CONSOLE_CURSOR_INFO structCursorInfo;
-    GetConsoleCursorInfo(hStdOut, &structCursorInfo);
+    CONSOLE_CURSOR_INFO structCursorInfo; //перенная для данных о курсоре
+    GetConsoleCursorInfo(hStdOut, &structCursorInfo); //получаем текущие данные о курсоре
     structCursorInfo.bVisible = show; // убираем видимость курсора
     structCursorInfo.dwSize = size; // редактирование размер курсора
-    SetConsoleCursorInfo(hStdOut, &structCursorInfo);
+    SetConsoleCursorInfo(hStdOut, &structCursorInfo); //применяем изменения к курсору
 }
 
 vector<vector<string>> create_field(int height, int width) {
-    vector<vector<string>> field(height, vector<string>(width));
+    vector<vector<string>> field(height, vector<string>(width)); //создание поля
     return field;
 }
 
-void print_field(int x, int y, vector<vector<std::string>> field) {
+void print_field(int x, int y, vector<vector<std::string>> field) { //функция для отрисовки поля работает для разного количества букв
     SetConsoleTextAttribute(hStdOut, 8);
     int const_x = x;
     GoToXY(x, y);
@@ -103,16 +103,16 @@ void print_field(int x, int y, vector<vector<std::string>> field) {
 }
 
 void print_keyboard(int x, int y, vector<vector<string>> keyboard, vector<vector<string>> &field, string hidden_word, 
-    int &row, int &column, int &field_row, int &field_column) {
+    int &row, int &column, int &field_row, int &field_column) { //функция для отрисовки клавиатуры + управления клавиатурой и изменения поля со словами
     for (int i = 0; i < keyboard.size(); ++i) {
         for (int j = 0; j < keyboard[i].size(); ++j) {
             GoToXY(x + j * 3, y + i * 2); //j * 3 чтобы было расстояние для буквы и скобки, i * 2 опускаемся вниз
-            if (keyboard[i][j] != " ") {
-                if (i == row && j == column) {
+            if (keyboard[i][j] != " ") { //проверяем что мы не выводим пробелы
+                if (i == row && j == column) { //выводим клавиатуру, если мы указывем на какую-то букву на консоли, подсвечиваем её
                     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 2);
                     cout << "[" << keyboard[i][j] << "]";
                 }
-                else {
+                else { //остальные просто серым печатаем
                     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 8);
                     cout << "[" << keyboard[i][j] << "]";
                 }
@@ -120,19 +120,19 @@ void print_keyboard(int x, int y, vector<vector<string>> keyboard, vector<vector
         }
         cout << endl;
     }
-    GoToXY(0, keyboard.size() * 2 + 1);
     int ch = _getch();
 
     switch (ch) {
     case UP: //стрелочка вверх 
-        if (row > 0 && keyboard[row][column] != " ") {
+        if (row > 0 && keyboard[row][column] != " ") { //ограничение что мы не можем выйти за пределы клавиатуры вверх
             --row;
         }
         break;
     case DOWN: //стрелочка вниз
-        if (row < keyboard.size() - 1) {
+        if (row < keyboard.size() - 1) { //ограничение что мы не можем выйти за пределы клавиатуры вниз
             ++row;
-            int min = min(column, keyboard[0].size() - column); //минимальное рассояние; смотрим в каком конце клавиатуры находимся
+            int min = min(column, keyboard[0].size() - column); //минимальное рассояние, смотрим в каком конце клавиатуры находимся
+            //нужно чтобы мы не выходили именно за пределы напечатанной клавиатуры(не попадали на пробел), т.к. в самом векторе клавиатуры есть пробелы
             if (keyboard[row][column] == " ") {
                 if (min == column) {
                     while (keyboard[row][column] == " " && column < keyboard[0].size() - 1) {
@@ -147,25 +147,25 @@ void print_keyboard(int x, int y, vector<vector<string>> keyboard, vector<vector
             }
         }
         break;
-    case LEFT: //стрелочка лево
-        if (column > 0) {
+    case LEFT: //стрелочка влево
+        if (column > 0) { //ограничение что мы не можем выйти за пределы клавиатуры влево
             --column;
-            if (keyboard[row][column] == " ") {
+            if (keyboard[row][column] == " ") { //проверяем, что если мы попали на пробел
                 ++column;
             }
         }
         break;
     case RIGHT: //стрелочка право
-        if (column < keyboard[0].size() - 1 && keyboard[row][column] != " ") {
+        if (column < keyboard[0].size() - 1 && keyboard[row][column] != " ") { //ограничение что мы не можем выйти за пределы клавиатуры вправо
             ++column;
-            if (keyboard[row][column] == " ") {
+            if (keyboard[row][column] == " ") { //проверяем, что если мы попали на пробел
                 --column;
             }
         }
         break;
     case ENTER: //enter
-        if (keyboard[row][column] == "<" && field_column != 0) {
-            if (field[field_row][field_column] == " ") {
+        if (keyboard[row][column] == "<" && field_column != 0) { //если мы нажали на кнопку стереть
+            if (field[field_row][field_column] == " ") { //если мы нажади на неё несколько раз
                 --field_column;
                 field[field_row][field_column] = " ";
             }
@@ -173,18 +173,17 @@ void print_keyboard(int x, int y, vector<vector<string>> keyboard, vector<vector
                 field[field_row][field_column] = " ";
             }
         }
-        else if (keyboard[row][column] == "@") {
+        else if (keyboard[row][column] == "@") { //кнопка сохранения/проверки слова потом поменяю
             if (field_row != field.size() - 1) {
                 ++field_row;
                 field_column = 0;
             }
         }
-        else if (field_column != field[0].size() - 1) {
-            field[field_row][field_column] = keyboard[row][column];
-            ++field_column;
-        }
         else {
-            field[field_row][field_column] = keyboard[row][column];
+            field[field_row][field_column] = keyboard[row][column]; //добавляем буквы в поле
+            if (field_column != field[0].size() - 1) { //если не последняя буква
+                ++field_column;
+            }
         }
         break;
     case ESCAPE: //escape
@@ -368,11 +367,11 @@ int main() {
         if (language == "RUSSIAN") {
             /*switch (option) {
             case 5:
-                hidden_word = get_random_word("Russian_dicrionary_5_letters.txt");
+                hidden_word = get_random_word("dictionaries/Russian_dicrionary_5_letters.txt");
             case 6:
-                hidden_word = get_random_word("Russian_dicrionary_6_letters.txt");
+                hidden_word = get_random_word("dictionaries/Russian_dicrionary_6_letters.txt");
             case 7:
-                hidden_word = get_random_word("Russian_dicrionary_7_letters.txt");
+                hidden_word = get_random_word("dictionaries/Russian_dicrionary_7_letters.txt");
             }*/
             while(true) {
                 system("CLS");

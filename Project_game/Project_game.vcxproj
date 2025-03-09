@@ -130,11 +130,17 @@
     <ClCompile Include="Project_game.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\ОтчётКТ1.md" />
     <None Include="ОтчётКТ1.md" />
     <None Include="ОтчётКТ2.md" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="English_5.txt" />
+    <Text Include="English_6.txt" />
+    <Text Include="English_7.txt" />
+    <Text Include="Russian_5.txt" />
+    <Text Include="Russian_6.txt" />
+    <Text Include="Russian_7.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

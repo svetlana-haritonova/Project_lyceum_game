@@ -367,11 +367,11 @@ int main() {
         if (language == "RUSSIAN") {
             /*switch (option) {
             case 5:
-                hidden_word = get_random_word("dictionaries/Russian_dicrionary_5_letters.txt");
+                hidden_word = get_random_word("dictionaries/Russian_5.txt");
             case 6:
-                hidden_word = get_random_word("dictionaries/Russian_dicrionary_6_letters.txt");
+                hidden_word = get_random_word("dictionaries/Russian_6.txt");
             case 7:
-                hidden_word = get_random_word("dictionaries/Russian_dicrionary_7_letters.txt");
+                hidden_word = get_random_word("dictionaries/Russian_7.txt");
             }*/
             while(true) {
                 system("CLS");
@@ -382,11 +382,11 @@ int main() {
         else if (language == "ENGLISH") {
             /*switch (option) {
             case 5:
-                hidden_word = get_random_word("English_dicrionary_5_letters.txt");
+                hidden_word = get_random_word("dictionaries/English_5.txt");
             case 6:
-                hidden_word = get_random_word("English_dicrionary_6_letters.txt");
+                hidden_word = get_random_word("dictionaries/English_6.txt");
             case 7:
-                hidden_word = get_random_word("English_dicrionary_7_letters.txt");
+                hidden_word = get_random_word("dictionaries/English_7.txt");
             }*/
             while (true) {
                 system("CLS");

@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="dictionaries">
+      <UniqueIdentifier>{b9e025d2-9322-4405-9bd9-9b768050acd8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Project_game.cpp">
@@ -22,5 +25,10 @@
   <ItemGroup>
     <None Include="ОтчётКТ1.md" />
     <None Include="ОтчётКТ2.md" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="English_5.txt">
+      <Filter>dictionaries</Filter>
+    </Text>
   </ItemGroup>
 </Project>

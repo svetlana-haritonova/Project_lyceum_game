@@ -30,5 +30,20 @@
     <Text Include="English_5.txt">
       <Filter>dictionaries</Filter>
     </Text>
+    <Text Include="Russian_7.txt">
+      <Filter>dictionaries</Filter>
+    </Text>
+    <Text Include="Russian_5.txt">
+      <Filter>dictionaries</Filter>
+    </Text>
+    <Text Include="Russian_6.txt">
+      <Filter>dictionaries</Filter>
+    </Text>
+    <Text Include="English_6.txt">
+      <Filter>dictionaries</Filter>
+    </Text>
+    <Text Include="English_7.txt">
+      <Filter>dictionaries</Filter>
+    </Text>
   </ItemGroup>
 </Project>

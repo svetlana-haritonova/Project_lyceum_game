@@ -4,24 +4,32 @@
 #include <vector>
 #include <fstream>
 #include <string>
+#include <set>
 #include <sstream>
+
+#include <random>
+#include <stdexcept>
 
 using std::vector;
 using std::fstream;
 using std::string;
+using std::set;
 using std::cout;
 using std::endl;
 using std::min;
 
 const char UP = 72; //клавишы на клавиатуре и их код
 const char DOWN = 80;
+const char BACKSPACE = 8;
+const char SHIFT = 32;
 const char LEFT = 75;
 const char RIGHT = 77;
 const char ENTER = 13;
 const char ESCAPE = 27;
 
-int randint(int from, int to) { //функция для выбора рандомной цифры в диапазоне
-    return from + (rand() % (to - from));
+
+int randint(int range) { //функция для выбора рандомной цифры в диапазоне
+    return rand() % range;
 }
 
 string get_random_word(string filename) {
@@ -29,15 +37,14 @@ string get_random_word(string filename) {
     file.open(filename);
     string sentence, word;
     vector<string> words;
-    while (!file.eof()) { //записывание в вектор слов пока не достигнут конец файла
-        std::getline(file, sentence);
+    while (std::getline(file, sentence)) { //записывание в вектор слов пока не достигнут конец файла
         std::stringstream text(sentence);
-        while (!text.eof()) {
-            text >> word;
+        while (text >> word) {
             words.push_back(word);
         }
     }
-    int i = randint(0, word.size() - 1); //выбор рандомного индекса в векторе и возвращения слова под этим индексом
+    file.close();
+    int i = randint(words.size() - 1); //выбор рандомного индекса в векторе и возвращения слова под этим индексом
     return words[i];
 }
 
@@ -56,54 +63,50 @@ void ConsoleCursorVisible(bool show, short size) {
 }
 
 vector<vector<string>> create_field(int height, int width) {
-    vector<vector<string>> field(height, vector<string>(width)); //создание поля
+    vector<vector<string>> field(height, vector<string>(width, " ")); //создание поля
     return field;
 }
 
-void print_field(int x, int y, vector<vector<std::string>> field) { //функция для отрисовки поля работает для разного количества букв
+void print_field(int x, int y, vector<vector<std::string>> field, set<string> used_letters, string hidden_word) { //функция для отрисовки поля работает для разного количества букв
     SetConsoleTextAttribute(hStdOut, 8);
-    int const_x = x;
-    GoToXY(x, y);
-    cout << "_";
-    ++x;
-    for (int i = 0; i < field.size(); ++i) {
-        GoToXY(x, y);
-        cout << "______";
-        x = x + 6;
-    }
-    x = const_x;
-    ++y;
+    int const_x = x, const_y = y;
     for (int i = 0; i < field.size(); ++i) {
         for (int j = 0; j < field[0].size(); ++j) {
+            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 6);
             GoToXY(x, y);
-            cout << "|     ";
+            cout << "_______";
+            ++y;
+            if (std::find(hidden_word.begin(), hidden_word.end(), field[i][j][0]) != hidden_word.end()) {
+                if (j == std::distance(hidden_word.begin(), std::find(hidden_word.begin(), hidden_word.end(), field[i][j][0]))) {
+                    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7 | BACKGROUND_GREEN);
+                }
+                else {
+                    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7 | BACKGROUND_RED | BACKGROUND_GREEN);
+                }
+            }
+            else {
+                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 6);
+            }
+            GoToXY(x, y);
+            cout << "|     |";
             ++y;
             GoToXY(x, y);
-            cout << "|  " << field[i][j] << "  ";
-            x = x + 6;
-            --y;
-        }
-        GoToXY(x, y);
-        cout << "|";
-        ++y;
-        GoToXY(x, y);
-        cout << "|";
-        ++y;
-        x = const_x;
-        for (int l = 0; l < field.size(); ++l) {
+            cout << "|  " << field[i][j] << "  |";
+            ++y;
             GoToXY(x, y);
-            cout << "|_____";
-            x = x + 6;
+            cout << "|_____|";
+            x = x + 7;
+            ++y;
+            y = const_y;
         }
-        GoToXY(x, y);
-        cout << "|";
-        ++y;
+        const_y = y + 4;
+        y = const_y;
         x = const_x;
     }
 }
 
 void print_keyboard(int x, int y, vector<vector<string>> keyboard, vector<vector<string>> &field, string hidden_word, 
-    int &row, int &column, int &field_row, int &field_column) { //функция для отрисовки клавиатуры + управления клавиатурой и изменения поля со словами
+    int &row, int &column, int &field_row, int &field_column, set<string> used_letters) { //функция для отрисовки клавиатуры + управления клавиатурой и изменения поля со словами
     for (int i = 0; i < keyboard.size(); ++i) {
         for (int j = 0; j < keyboard[i].size(); ++j) {
             GoToXY(x + j * 3, y + i * 2); //j * 3 чтобы было расстояние для буквы и скобки, i * 2 опускаемся вниз
@@ -164,7 +167,27 @@ void print_keyboard(int x, int y, vector<vector<string>> keyboard, vector<vector
         }
         break;
     case ENTER: //enter
-        if (keyboard[row][column] == "<" && field_column != 0) { //если мы нажали на кнопку стереть
+        if (field[field_row][field_column] == " ") { //проверяем что ячейка пустая
+            field[field_row][field_column] = keyboard[row][column]; //добавляем буквы в поле
+            used_letters.insert(field[field_row][field_column]); //добавляем букву в сет использованных букв
+            if (field_column != field[0].size() - 1) { //если не последняя буква
+                ++field_column;
+            }
+        }
+        else {
+
+        }
+        break;
+    case SHIFT: //shift
+        if (field_column == field[field_row].size() - 1) { //сохраняем слово
+            if (field_row != field.size() - 1) {
+                ++field_row;
+                field_column = 0;
+            }
+        }
+        break;
+    case BACKSPACE: //backspace для стирания букв
+        if (field_column != 0) {
             if (field[field_row][field_column] == " ") { //если мы нажади на неё несколько раз
                 --field_column;
                 field[field_row][field_column] = " ";
@@ -173,21 +196,9 @@ void print_keyboard(int x, int y, vector<vector<string>> keyboard, vector<vector
                 field[field_row][field_column] = " ";
             }
         }
-        else if (keyboard[row][column] == "@") { //кнопка сохранения/проверки слова потом поменяю
-            if (field_row != field.size() - 1) {
-                ++field_row;
-                field_column = 0;
-            }
-        }
-        else {
-            field[field_row][field_column] = keyboard[row][column]; //добавляем буквы в поле
-            if (field_column != field[0].size() - 1) { //если не последняя буква
-                ++field_column;
-            }
-        }
         break;
     case ESCAPE: //escape
-        return;
+        exit(0);
     }
 }
 
@@ -341,17 +352,17 @@ int main() {
     }
 
     vector<vector<string>> English_keyboard = {
-        {"@", "q", "w", "e", "r", "t", "y", "u", "i", "o", "p", "<"},
-        {" ", " ", "a", "s", "d", "f", "g", "h", "j", "k", "l", " "},
-        {" ", " ", " ", "z", "x", "c", "v", "b", "n", "m", " ", " "}
+        {"q", "w", "e", "r", "t", "y", "u", "i", "o", "p"},
+        {" ", "a", "s", "d", "f", "g", "h", "j", "k", "l"},
+        {" ", " ", "z", "x", "c", "v", "b", "n", "m", " "}
     };
 
 
 
     vector<vector<string>> Russian_keyboard = {
-        {"@", "ё", "й", "ц", "у", "к", "е", "н", "г", "ш", "щ", "з", "х", "ъ", "<"},
-        {" ", " ", "ф", "ы", "в", "а", "п", "р", "о", "л", "д", "ж", "э", " ", " "},
-        {" ", " ", " ", "я", "ч", "с", "м", "и", "т", "ь", "б", "ю", " ", " ", " "}
+        {"ё", "й", "ц", "у", "к", "е", "н", "г", "ш", "щ", "з", "х", "ъ"},
+        {" ", "ф", "ы", "в", "а", "п", "р", "о", "л", "д", "ж", "э", " "},
+        {" ", " ", "я", "ч", "с", "м", "и", "т", "ь", "б", "ю", " ", " "}
     };
 
 
@@ -361,37 +372,44 @@ int main() {
     int column = 0;
     int field_row = 0;
     int field_column = 0;
-    string hidden_word, letter = "";
+    string hidden_word;
+    set<string> used_letters;
     vector<vector<string>> field = create_field(option, option);
 
         if (language == "RUSSIAN") {
-            /*switch (option) {
+            switch (option) {
             case 5:
-                hidden_word = get_random_word("dictionaries/Russian_5.txt");
+                hidden_word = get_random_word("Russian_5.txt");
+                break;
             case 6:
-                hidden_word = get_random_word("dictionaries/Russian_6.txt");
+                hidden_word = get_random_word("Russian_6.txt");
+                break;
             case 7:
-                hidden_word = get_random_word("dictionaries/Russian_7.txt");
-            }*/
+                hidden_word = get_random_word("Russian_7.txt");
+                break;
+            }
             while(true) {
                 system("CLS");
-                print_field(50, 5, field);
-                print_keyboard(49, option * 3 + 7, Russian_keyboard, field, hidden_word, row, column, field_row, field_column);
+                print_field(50, 5, field, used_letters, hidden_word);
+                print_keyboard(49, option * 3 + 7, Russian_keyboard, field, hidden_word, row, column, field_row, field_column, used_letters);
             }
         }
         else if (language == "ENGLISH") {
-            /*switch (option) {
+            switch (option) {
             case 5:
-                hidden_word = get_random_word("dictionaries/English_5.txt");
+                hidden_word = get_random_word("dictionaries\English_5.txt");
+                break;
             case 6:
-                hidden_word = get_random_word("dictionaries/English_6.txt");
+                hidden_word = get_random_word("English_6.txt");
+                break;
             case 7:
-                hidden_word = get_random_word("dictionaries/English_7.txt");
-            }*/
+                hidden_word = get_random_word("English_7.txt");
+                break;
+            }
             while (true) {
                 system("CLS");
-                print_field(50, 5, field);
-                print_keyboard(49, option * 3 + 7, English_keyboard, field, hidden_word, row, column, field_row, field_column);
+                print_field(50, 5, field, used_letters, hidden_word);
+                print_keyboard(49, option * 3 + 7, English_keyboard, field, hidden_word, row, column, field_row, field_column, used_letters);
             }
         }
 }

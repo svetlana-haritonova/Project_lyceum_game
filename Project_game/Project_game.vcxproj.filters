@@ -9,28 +9,11 @@
     <None Include="ОтчётКТ2.md" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="English_5.txt">
-      <Filter>dicitonaries</Filter>
-    </Text>
-    <Text Include="English_6.txt">
-      <Filter>dicitonaries</Filter>
-    </Text>
-    <Text Include="English_7.txt">
-      <Filter>dicitonaries</Filter>
-    </Text>
-    <Text Include="Russian_5.txt">
-      <Filter>dicitonaries</Filter>
-    </Text>
-    <Text Include="Russian_6.txt">
-      <Filter>dicitonaries</Filter>
-    </Text>
-    <Text Include="Russian_7.txt">
-      <Filter>dicitonaries</Filter>
-    </Text>
-  </ItemGroup>
-  <ItemGroup>
-    <Filter Include="dicitonaries">
-      <UniqueIdentifier>{db4e057d-4493-4fc3-ae0c-722a45e6918a}</UniqueIdentifier>
-    </Filter>
+    <Text Include="English_5.txt" />
+    <Text Include="Russian_7.txt" />
+    <Text Include="Russian_6.txt" />
+    <Text Include="Russian_5.txt" />
+    <Text Include="English_7.txt" />
+    <Text Include="English_6.txt" />
   </ItemGroup>
 </Project>

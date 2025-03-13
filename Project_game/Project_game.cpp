@@ -379,13 +379,13 @@ int main() {
         if (language == "RUSSIAN") {
             switch (option) {
             case 5:
-                hidden_word = get_random_word("Russian_5.txt");
+                hidden_word = get_random_word("dictionaries\Russian_5.txt");
                 break;
             case 6:
-                hidden_word = get_random_word("Russian_6.txt");
+                hidden_word = get_random_word("dictionaries\Russian_6.txt");
                 break;
             case 7:
-                hidden_word = get_random_word("Russian_7.txt");
+                hidden_word = get_random_word("dictionaries\Russian_7.txt");
                 break;
             }
             while(true) {
@@ -400,10 +400,10 @@ int main() {
                 hidden_word = get_random_word("dictionaries\English_5.txt");
                 break;
             case 6:
-                hidden_word = get_random_word("English_6.txt");
+                hidden_word = get_random_word("dictionaries\English_6.txt");
                 break;
             case 7:
-                hidden_word = get_random_word("English_7.txt");
+                hidden_word = get_random_word("dictionaries\English_7.txt");
                 break;
             }
             while (true) {

@@ -147,6 +147,7 @@ void print_keyboard(int x, int y, vector<vector<string>> keyboard, vector<vector
             }
         }
         break;
+
     case LEFT: //стрелочка влево
         if (column > 0) { //ограничение что мы не можем выйти за пределы клавиатуры влево
             --column;

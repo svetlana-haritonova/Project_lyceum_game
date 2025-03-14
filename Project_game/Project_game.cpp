@@ -28,6 +28,7 @@ const char ENTER = 13;
 const char ESCAPE = 27;
 
 
+
 int randint(int range) { //функция для выбора рандомной цифры в диапазоне
     return rand() % range;
 }
@@ -67,7 +68,7 @@ vector<vector<string>> create_field(int height, int width) {
     return field;
 }
 
-void print_field(int x, int y, vector<vector<std::string>> field, set<string> used_letters, string hidden_word) { //функция для отрисовки поля работает для разного количества букв
+void print_field(int x, int y, vector<vector<std::string>> field, const set<string>& used_letters,const string& hidden_word) { //функция для отрисовки поля работает для разного количества букв
     SetConsoleTextAttribute(hStdOut, 8);
     int const_x = x, const_y = y;
     for (int i = 0; i < field.size(); ++i) {
@@ -311,6 +312,9 @@ int main() {
             }
         }
     }
+
+    menu_of
+
     else if (language == "ENGLISH") {
         cout << "CHOOSE GAME OPTION";
         while (true) {
@@ -352,7 +356,7 @@ int main() {
         }
     }
 
-    vector<vector<string>> English_keyboard = {
+    const vector<vector<string>> English_keyboard = {
         {"q", "w", "e", "r", "t", "y", "u", "i", "o", "p"},
         {" ", "a", "s", "d", "f", "g", "h", "j", "k", "l"},
         {" ", " ", "z", "x", "c", "v", "b", "n", "m", " "}
@@ -360,7 +364,7 @@ int main() {
 
 
 
-    vector<vector<string>> Russian_keyboard = {
+    const vector<vector<string>> Russian_keyboard = {
         {"ё", "й", "ц", "у", "к", "е", "н", "г", "ш", "щ", "з", "х", "ъ"},
         {" ", "ф", "ы", "в", "а", "п", "р", "о", "л", "д", "ж", "э", " "},
         {" ", " ", "я", "ч", "с", "м", "и", "т", "ь", "б", "ю", " ", " "}
@@ -377,40 +381,40 @@ int main() {
     set<string> used_letters;
     vector<vector<string>> field = create_field(option, option);
 
-        if (language == "RUSSIAN") {
-            switch (option) {
-            case 5:
-                hidden_word = get_random_word("Russian_5.txt");
-                break;
-            case 6:
-                hidden_word = get_random_word("Russian_6.txt");
-                break;
-            case 7:
-                hidden_word = get_random_word("Russian_7.txt");
-                break;
-            }
-            while(true) {
-                system("CLS");
-                print_field(50, 5, field, used_letters, hidden_word);
-                print_keyboard(49, option * 3 + 7, Russian_keyboard, field, hidden_word, row, column, field_row, field_column, used_letters);
-            }
+    if (language == "RUSSIAN") {
+        switch (option) {
+        case 5:
+            hidden_word = get_random_word("Russian_5.txt");
+            break;
+        case 6:
+            hidden_word = get_random_word("Russian_6.txt");
+            break;
+        case 7:
+            hidden_word = get_random_word("Russian_7.txt");
+            break;
         }
-        else if (language == "ENGLISH") {
-            switch (option) {
-            case 5:
-                hidden_word = get_random_word("English_5.txt");
-                break;
-            case 6:
-                hidden_word = get_random_word("English_6.txt");
-                break;
-            case 7:
-                hidden_word = get_random_word("English_7.txt");
-                break;
-            }
-            while (true) {
-                system("CLS");
-                print_field(50, 5, field, used_letters, hidden_word);
-                print_keyboard(49, option * 3 + 7, English_keyboard, field, hidden_word, row, column, field_row, field_column, used_letters);
-            }
+               
+        while(true) {
+            system("CLS");
+            print_field(50, 5, field, used_letters, hidden_word);
+            print_keyboard(49, option * 3 + 7, Russian_keyboard, field, hidden_word, row, column, field_row, field_column, used_letters);
         }
+    } else if (language == "ENGLISH") {
+        switch (option) {
+        case 5:
+            hidden_word = get_random_word("English_5.txt");
+            break;
+        case 6:
+            hidden_word = get_random_word("English_6.txt");
+            break;
+        case 7:
+            hidden_word = get_random_word("English_7.txt");
+            break;
+        }
+        while (true) {
+            system("CLS");
+            print_field(50, 5, field, used_letters, hidden_word);
+            print_keyboard(49, option * 3 + 7, English_keyboard, field, hidden_word, row, column, field_row, field_column, used_letters);
+        }
+    }
 }

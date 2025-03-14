@@ -201,6 +201,8 @@ void print_keyboard(int x, int y, vector<vector<string>> keyboard, vector<vector
         break;
     case ESCAPE: //escape
         exit(0);
+    default:
+        break;
     }
 }
 
@@ -259,6 +261,8 @@ int main() {
             language = menu_of_languages[active_menu];
             system("CLS");
             break;
+        default:
+            break;
         }
         if (language != "") {
             break;
@@ -287,7 +291,6 @@ int main() {
                 cout << menu_of_options[i] << endl;
             }
             ch = _getch();
-
             switch (ch) {
             case ESCAPE: //escape
                 exit(0);
@@ -301,10 +304,11 @@ int main() {
                     ++active_menu;
                 }
                 break;
-
             case ENTER:
                 option = menu_of_options[active_menu];
                 system("CLS");
+                break;
+            default:
                 break;
             }
             if (option != 0) {
@@ -313,7 +317,6 @@ int main() {
         }
     }
 
-    menu_of
 
     else if (language == "ENGLISH") {
         cout << "CHOOSE GAME OPTION";
@@ -348,6 +351,9 @@ int main() {
             case ENTER:
                 option = menu_of_options[active_menu];
                 system("CLS");
+                break;
+
+            default:
                 break;
             }
             if (option != 0) {
@@ -392,6 +398,8 @@ int main() {
         case 7:
             hidden_word = get_random_word("Russian_7.txt");
             break;
+        default:
+            break;
         }
                
         while(true) {
@@ -409,6 +417,8 @@ int main() {
             break;
         case 7:
             hidden_word = get_random_word("English_7.txt");
+            break;
+        default:
             break;
         }
         while (true) {

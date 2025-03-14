@@ -56,11 +56,11 @@ void GoToXY(short x, short y) { //перемещение курсора на п�
 }
 
 void ConsoleCursorVisible(bool show, short size) {
-    CONSOLE_CURSOR_INFO structCursorInfo; //перенная для данных о курсоре
-    GetConsoleCursorInfo(hStdOut, &structCursorInfo); //получаем текущие данные о курсоре
-    structCursorInfo.bVisible = show; // убираем видимость курсора
-    structCursorInfo.dwSize = size; // редактирование размер курсора
-    SetConsoleCursorInfo(hStdOut, &structCursorInfo); //применяем изменения к курсору
+    CONSOLE_CURSOR_INFO struct_cursor_info; //перенная для данных о курсоре
+    GetConsoleCursorInfo(hStdOut, &struct_cursor_info); //получаем текущие данные о курсоре
+    struct_cursor_info.bVisible = show; // редактирование видимости курсора
+    struct_cursor_info.dwSize = size; // редактирование размер курсора
+    SetConsoleCursorInfo(hStdOut, &struct_cursor_info); //применяем изменения к курсору
 }
 
 vector<vector<string>> create_field(int height, int width) {
@@ -405,7 +405,7 @@ int main() {
         while(true) {
             system("CLS");
             print_field(50, 5, field, used_letters, hidden_word);
-            print_keyboard(49, option * 3 + 7, Russian_keyboard, field, hidden_word, row, column, field_row, field_column, used_letters);
+            print_keyboard(15, option * 2 + 5, Russian_keyboard, field, hidden_word, row, column, field_row, field_column, used_letters);
         }
     } else if (language == "ENGLISH") {
         switch (option) {
@@ -424,7 +424,7 @@ int main() {
         while (true) {
             system("CLS");
             print_field(50, 5, field, used_letters, hidden_word);
-            print_keyboard(49, option * 3 + 7, English_keyboard, field, hidden_word, row, column, field_row, field_column, used_letters);
+            print_keyboard(15, option * 2 + 5, English_keyboard, field, hidden_word, row, column, field_row, field_column, used_letters);
         }
     }
 }

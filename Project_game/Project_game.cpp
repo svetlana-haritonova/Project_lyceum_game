@@ -4,7 +4,6 @@
 #include <vector>
 #include <fstream>
 #include <string>
-#include <set>
 #include <sstream>
 
 #include <random>
@@ -13,7 +12,6 @@
 using std::vector;
 using std::fstream;
 using std::string;
-using std::set;
 using std::cout;
 using std::endl;
 using std::min;
@@ -21,7 +19,6 @@ using std::min;
 const char UP = 72; //клавишы на клавиатуре и их код
 const char DOWN = 80;
 const char BACKSPACE = 8;
-const char SHIFT = 32;
 const char LEFT = 75;
 const char RIGHT = 77;
 const char ENTER = 13;
@@ -68,25 +65,60 @@ vector<vector<string>> create_field(int height, int width) {
     return field;
 }
 
-void print_field(int x, int y, vector<vector<std::string>> field, const set<string>& used_letters,const string& hidden_word) { //функция для отрисовки поля работает для разного количества букв
-    SetConsoleTextAttribute(hStdOut, 8);
+void PaintLineOfField(int x, int y, vector<string> field_line, string hidden_word) {
+    int const_y = y;
+    for (int i = 0; i < field_line.size(); ++i) {
+        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 6);
+        GoToXY(x, y);
+        cout << "_______";
+        ++y;
+        if (std::find(hidden_word.begin(), hidden_word.end(), field_line[i][0]) != hidden_word.end()) {
+            if (field_line[i][0] == hidden_word[i]) {
+                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7 | BACKGROUND_GREEN);
+            }
+            else {
+                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7 | BACKGROUND_RED | BACKGROUND_GREEN);
+            }
+        }
+        else {
+            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 6);
+        }
+        GoToXY(x, y);
+        cout << "|     |";
+        ++y;
+        GoToXY(x, y);
+        cout << "|  " << field_line[i] << "  |";
+        ++y;
+        GoToXY(x, y);
+        cout << "|_____|";
+        x = x + 7;
+        ++y;
+        y = const_y;
+    }
+}
+
+
+
+void print_field(int x, int y, vector<vector<std::string>> field, const string& hidden_word, vector<bool> check_for_paint_line) { //функция для отрисовки поля работает для разного количества букв
     int const_x = x, const_y = y;
     for (int i = 0; i < field.size(); ++i) {
         for (int j = 0; j < field[0].size(); ++j) {
-            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 6);
+            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 8);
             GoToXY(x, y);
             cout << "_______";
             ++y;
-            if (std::find(hidden_word.begin(), hidden_word.end(), field[i][j][0]) != hidden_word.end()) {
-                if (j == std::distance(hidden_word.begin(), std::find(hidden_word.begin(), hidden_word.end(), field[i][j][0]))) {
-                    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7 | BACKGROUND_GREEN);
+            if (check_for_paint_line[i] == true) {
+                if (std::find(hidden_word.begin(), hidden_word.end(), field[i][j][0]) != hidden_word.end()) {
+                    if (field[i][j][0] == hidden_word[j]) {
+                        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7 | BACKGROUND_GREEN);
+                    }
+                    else {
+                        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7 | BACKGROUND_RED | BACKGROUND_GREEN);
+                    }
                 }
                 else {
-                    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7 | BACKGROUND_RED | BACKGROUND_GREEN);
+                    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 8);
                 }
-            }
-            else {
-                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 6);
             }
             GoToXY(x, y);
             cout << "|     |";
@@ -107,7 +139,7 @@ void print_field(int x, int y, vector<vector<std::string>> field, const set<stri
 }
 
 void print_keyboard(int x, int y, vector<vector<string>> keyboard, vector<vector<string>> &field, string hidden_word, 
-    int &row, int &column, int &field_row, int &field_column, set<string> used_letters) { //функция для отрисовки клавиатуры + управления клавиатурой и изменения поля со словами
+    int &row, int &column, int &field_row, int &field_column, vector<bool> &check_for_painting_line) { //функция для отрисовки клавиатуры + управления клавиатурой и изменения поля со словами
     for (int i = 0; i < keyboard.size(); ++i) {
         for (int j = 0; j < keyboard[i].size(); ++j) {
             GoToXY(x + j * 3, y + i * 2); //j * 3 чтобы было расстояние для буквы и скобки, i * 2 опускаемся вниз
@@ -171,17 +203,12 @@ void print_keyboard(int x, int y, vector<vector<string>> keyboard, vector<vector
     case ENTER: //enter
         if (field[field_row][field_column] == " ") { //проверяем что ячейка пустая
             field[field_row][field_column] = keyboard[row][column]; //добавляем буквы в поле
-            used_letters.insert(field[field_row][field_column]); //добавляем букву в сет использованных букв
             if (field_column != field[0].size() - 1) { //если не последняя буква
                 ++field_column;
             }
         }
-        else {
-
-        }
-        break;
-    case SHIFT: //shift
-        if (field_column == field[field_row].size() - 1) { //сохраняем слово
+        else if (field[field_row][field_column] != " " && field_column == field[0].size() - 1) {
+            check_for_painting_line[field_row] = true;
             if (field_row != field.size() - 1) {
                 ++field_row;
                 field_column = 0;
@@ -384,8 +411,8 @@ int main() {
     int field_row = 0;
     int field_column = 0;
     string hidden_word;
-    set<string> used_letters;
     vector<vector<string>> field = create_field(option, option);
+    vector<bool> check_for_painting_line(option, false);
 
     if (language == "RUSSIAN") {
         switch (option) {
@@ -404,8 +431,8 @@ int main() {
                
         while(true) {
             system("CLS");
-            print_field(50, 5, field, used_letters, hidden_word);
-            print_keyboard(15, option * 2 + 5, Russian_keyboard, field, hidden_word, row, column, field_row, field_column, used_letters);
+            print_field(50, 5, field, hidden_word, check_for_painting_line);
+            print_keyboard(15, option * 2 + 5, Russian_keyboard, field, hidden_word, row, column, field_row, field_column, check_for_painting_line);
         }
     } else if (language == "ENGLISH") {
         switch (option) {
@@ -423,8 +450,8 @@ int main() {
         }
         while (true) {
             system("CLS");
-            print_field(50, 5, field, used_letters, hidden_word);
-            print_keyboard(15, option * 2 + 5, English_keyboard, field, hidden_word, row, column, field_row, field_column, used_letters);
+            print_field(50, 5, field, hidden_word, check_for_painting_line);
+            print_keyboard(15, option * 2 + 5, English_keyboard, field, hidden_word, row, column, field_row, field_column, check_for_painting_line);
         }
     }
 }

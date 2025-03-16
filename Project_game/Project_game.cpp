@@ -65,39 +65,6 @@ vector<vector<string>> create_field(int height, int width) {
     return field;
 }
 
-void PaintLineOfField(int x, int y, vector<string> field_line, string hidden_word) {
-    int const_y = y;
-    for (int i = 0; i < field_line.size(); ++i) {
-        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 6);
-        GoToXY(x, y);
-        cout << "_______";
-        ++y;
-        if (std::find(hidden_word.begin(), hidden_word.end(), field_line[i][0]) != hidden_word.end()) {
-            if (field_line[i][0] == hidden_word[i]) {
-                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7 | BACKGROUND_GREEN);
-            }
-            else {
-                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7 | BACKGROUND_RED | BACKGROUND_GREEN);
-            }
-        }
-        else {
-            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 6);
-        }
-        GoToXY(x, y);
-        cout << "|     |";
-        ++y;
-        GoToXY(x, y);
-        cout << "|  " << field_line[i] << "  |";
-        ++y;
-        GoToXY(x, y);
-        cout << "|_____|";
-        x = x + 7;
-        ++y;
-        y = const_y;
-    }
-}
-
-
 
 void print_field(int x, int y, vector<vector<std::string>> field, const string& hidden_word, vector<bool> check_for_paint_line) { //функция для отрисовки поля работает для разного количества букв
     int const_x = x, const_y = y;
@@ -138,8 +105,8 @@ void print_field(int x, int y, vector<vector<std::string>> field, const string& 
     }
 }
 
-void print_keyboard(int x, int y, vector<vector<string>> keyboard, vector<vector<string>> &field, string hidden_word, 
-    int &row, int &column, int &field_row, int &field_column, vector<bool> &check_for_painting_line) { //функция для отрисовки клавиатуры + управления клавиатурой и изменения поля со словами
+void print_keyboard(int x, int y, vector<vector<string>> keyboard, vector<vector<string>> &field, 
+    int &row, int &column, int &field_row, int &field_column, string hidden_word, string &entered_word, vector<bool> &check_for_painting_line) { //функция для отрисовки клавиатуры + управления клавиатурой и изменения поля со словами
     for (int i = 0; i < keyboard.size(); ++i) {
         for (int j = 0; j < keyboard[i].size(); ++j) {
             GoToXY(x + j * 3, y + i * 2); //j * 3 чтобы было расстояние для буквы и скобки, i * 2 опускаемся вниз
@@ -209,6 +176,10 @@ void print_keyboard(int x, int y, vector<vector<string>> keyboard, vector<vector
         }
         else if (field[field_row][field_column] != " " && field_column == field[0].size() - 1) {
             check_for_painting_line[field_row] = true;
+            entered_word = "";
+            for (int i = 0; i < field[0].size(); ++i) {
+                entered_word += field[field_row][i];
+            }
             if (field_row != field.size() - 1) {
                 ++field_row;
                 field_column = 0;
@@ -410,7 +381,7 @@ int main() {
     int column = 0;
     int field_row = 0;
     int field_column = 0;
-    string hidden_word;
+    string hidden_word, entered_word;
     vector<vector<string>> field = create_field(option, option);
     vector<bool> check_for_painting_line(option, false);
 
@@ -430,9 +401,32 @@ int main() {
         }
                
         while(true) {
-            system("CLS");
-            print_field(50, 5, field, hidden_word, check_for_painting_line);
-            print_keyboard(15, option * 2 + 5, Russian_keyboard, field, hidden_word, row, column, field_row, field_column, check_for_painting_line);
+            print_field(50, 1, field, hidden_word, check_for_painting_line);
+            if (entered_word == hidden_word || field_row == field.size() - 1 && check_for_painting_line[field_row] == true) {
+                system("CLS");
+                break;
+            }
+            print_keyboard(15, option * 2 + 1, Russian_keyboard, field, row, column, field_row, field_column, hidden_word, entered_word, check_for_painting_line);
+        }
+        if (entered_word == hidden_word) {
+            while (true) {
+                SetConsoleTextAttribute(hStdOut, 8 | 8);
+                GoToXY(50, 10);
+                cout << "ПОЗДРАВЛЯЕМ!";
+                GoToXY(48, 11);
+                cout << "ВЫ УГАДАЛИ СЛОВО";
+                GoToXY(47, 12);
+                cout << "ЗАГАДННОЕ СЛОВО: " << hidden_word;
+            }
+        }
+        else if (field_row == field.size() - 1 && check_for_painting_line[field_row] == true) {
+            while (true) {
+                SetConsoleTextAttribute(hStdOut, 8 | 8);
+                GoToXY(50, 10);
+                cout << "ВЫ ПРОИГРАЛИ";
+                GoToXY(47, 11);
+                cout << "ЗАГАДННОЕ СЛОВО: " << hidden_word;
+            }
         }
     } else if (language == "ENGLISH") {
         switch (option) {
@@ -449,9 +443,32 @@ int main() {
             break;
         }
         while (true) {
-            system("CLS");
-            print_field(50, 5, field, hidden_word, check_for_painting_line);
-            print_keyboard(15, option * 2 + 5, English_keyboard, field, hidden_word, row, column, field_row, field_column, check_for_painting_line);
+            print_field(50, 1, field, hidden_word, check_for_painting_line);
+            if (entered_word == hidden_word || field_row == field.size() - 1 && check_for_painting_line[field_row] == true) {
+                system("CLS");
+                break;
+            }
+            print_keyboard(15, option * 2 + 1, English_keyboard, field, row, column, field_row, field_column, hidden_word, entered_word, check_for_painting_line);
+        }
+        if (entered_word == hidden_word) {
+            while (true) {
+                GoToXY(50, 10);
+                SetConsoleTextAttribute(hStdOut, 8 | 8);
+                cout << "CONGRATULATIONS!";
+                GoToXY(48, 11);
+                cout << "YOU GUESSED THE WORD";
+                GoToXY(49, 12);
+                cout << "HIDDEN WORD: " << hidden_word;
+            }
+        }
+        else if (field_row == field.size() - 1 && check_for_painting_line[field_row] == true) {
+            while (true) {
+                SetConsoleTextAttribute(hStdOut, 8 | 8); //поправить фон
+                GoToXY(50, 10);
+                cout << "YOU LOST";
+                GoToXY(47, 11);
+                cout << "HIDDEN WORD: " << hidden_word;
+            }
         }
     }
 }

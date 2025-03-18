@@ -18,7 +18,7 @@ using std::cout;
 using std::endl;
 using std::min;
 
-string Get_Random_Word(const string& filename) {
+string GetRandomWord(const string& filename) { //функция для генерации рандомного слова
     std::srand(static_cast<unsigned int>(std::time(nullptr))); // Инициализация генератора случайных чисел
 
     std::fstream file;
@@ -72,30 +72,30 @@ string Get_Random_Word(const string& filename) {
 
 HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE); //получаем дескриптор консоли, чтобы работать с ней
 
-void Go_To_XY(short x, short y) { //перемещение курсора на позицию (x, y)
+void GoToXY(short x, short y) { //перемещение курсора на позицию (x, y)
     SetConsoleCursorPosition(hStdOut, { x, y });
 }
 
-void Console_Cursor_Visible(bool show, short size) {
-    CONSOLE_CURSOR_INFO struct_cursor_info; //перенная для данных о курсоре
+void ConsoleCursorVisible(bool show, short size) {
+    CONSOLE_CURSOR_INFO struct_cursor_info; //переменная для данных о курсоре
     GetConsoleCursorInfo(hStdOut, &struct_cursor_info); //получаем текущие данные о курсоре
     struct_cursor_info.bVisible = show; // редактирование видимости курсора
     struct_cursor_info.dwSize = size; // редактирование размер курсора
     SetConsoleCursorInfo(hStdOut, &struct_cursor_info); //применяем изменения к курсору
 }
 
-vector<vector<string>> Create_Field(int height, int width) {
+vector<vector<string>> CreateField(int height, int width) {
     vector<vector<string>> field(height, vector<string>(width, " ")); //создание поля
     return field;
 }
 
 
-void Print_Field(int x, int y, vector<vector<std::string>> field, const string& hidden_word, vector<bool> check_for_paint_line) { //функция для отрисовки поля работает для разного количества букв
+void PrintField(int x, int y, vector<vector<std::string>> field, const string& hidden_word, vector<bool> check_for_paint_line) { //функция для отрисовки поля работает для разного количества букв
     int const_x = x, const_y = y;
     for (int i = 0; i < field.size(); ++i) {
         for (int j = 0; j < field[0].size(); ++j) {
             SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 8);
-            Go_To_XY(x, y);
+            GoToXY(x, y);
             cout << "_______";
             ++y;
             if (check_for_paint_line[i] == true) {
@@ -111,13 +111,13 @@ void Print_Field(int x, int y, vector<vector<std::string>> field, const string& 
                     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 8);
                 }
             }
-            Go_To_XY(x, y);
+            GoToXY(x, y);
             cout << "|     |";
             ++y;
-            Go_To_XY(x, y);
+            GoToXY(x, y);
             cout << "|  " << field[i][j] << "  |";
             ++y;
-            Go_To_XY(x, y);
+            GoToXY(x, y);
             cout << "|_____|";
             x = x + 7;
             ++y;
@@ -129,11 +129,11 @@ void Print_Field(int x, int y, vector<vector<std::string>> field, const string& 
     }
 }
 
-void Print_Keyboard(int x, int y, vector<vector<string>> keyboard, vector<vector<string>>& field,
+void PrintKeyboard(int x, int y, vector<vector<string>> keyboard, vector<vector<string>>& field,
     int& row, int& column, int& field_row, int& field_column, string hidden_word, string& entered_word, vector<bool>& check_for_painting_line) { //функция для отрисовки клавиатуры + управления клавиатурой и изменения поля со словами
     for (int i = 0; i < keyboard.size(); ++i) {
         for (int j = 0; j < keyboard[i].size(); ++j) {
-            Go_To_XY(x + j * 3, y + i * 2); //j * 3 чтобы было расстояние для буквы и скобки, i * 2 опускаемся вниз
+            GoToXY(x + j * 3, y + i * 2); //j * 3 чтобы было расстояние для буквы и скобки, i * 2 опускаемся вниз
             if (keyboard[i][j] != " ") { //проверяем что мы не выводим пробелы
                 if (i == row && j == column) { //выводим клавиатуру, если мы указывем на какую-то букву на консоли, подсвечиваем её
                     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 2);

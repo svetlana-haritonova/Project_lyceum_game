@@ -129,7 +129,7 @@ void Print_Field(int x, int y, vector<vector<std::string>> field, const string& 
     }
 }
 
-void Print_Keyboard(int x, int y, vector<vector<string>> keyboard, vector<vector<string>>& field,
+void Print_Keyboard(int x, int y,const vector<vector<string>> keyboard, vector<vector<string>>& field,
     int& row, int& column, int& field_row, int& field_column, string hidden_word, string& entered_word, vector<bool>& check_for_painting_line) { //функция для отрисовки клавиатуры + управления клавиатурой и изменения поля со словами
     for (int i = 0; i < keyboard.size(); ++i) {
         for (int j = 0; j < keyboard[i].size(); ++j) {

@@ -13,14 +13,14 @@ using std::string;
 //const char ENTER = 13;
 //const char ESCAPE = 27;
 
-enum class Keyboard_Keys : char { //клавишы на клавиатуре и их код
+enum class Keyboard_Keys : int { //клавишы на клавиатуре и их код
     UP = 72,
     DOWN = 80,
     BACKSPACE = 8,
     LEFT = 75,
     RIGHT = 77,
     ENTER = 13,
-    ESCAPE = 27,
+    ESCAPE = 27
 };
 
 

@@ -9,7 +9,8 @@
 #include <random>
 #include <cstdlib>
 #include <stdexcept>
-#include "../Constants/Constants.cpp"
+#include "..\Functions\Functions.h"
+#include "..\Constants\Constants.h"
 
 using std::vector;
 using std::fstream;
@@ -20,68 +21,75 @@ using std::min;
 
 string GetRandomWord(const string& filename) { //функци€ дл€ генерации рандомного слова
     std::srand(static_cast<unsigned int>(std::time(nullptr))); // »нициализаци€ генератора случайных чисел
-
-    std::fstream file;
+    fstream file;
     file.open(filename);
-
-    if (!file.is_open()) { // ѕроверка на успешное открытие файла
-        cout << "Error, file is not opened." << endl;
-        return ""; // ¬озвращаем пустую строку или можно обработать ошибку иначе
-    }
-
-    std::string sentence, word;
-    std::vector<std::string> words;
-
-    while (std::getline(file, sentence)) { // „тение строк из файла
+    string sentence, word;
+    vector<string> words;
+    while (std::getline(file, sentence)) { //записывание в вектор слов пока не достигнут конец файла
         std::stringstream text(sentence);
         while (text >> word) {
-            words.push_back(word); // ƒобавление слов в вектор
+            words.push_back(word);
         }
     }
-
     file.close();
-
-    if (words.empty()) { // ѕроверка на пустой вектор
-        cout << "Error. File do not have words." << endl;
-        return ""; // ¬озвращаем пустую строку или можно обработать ошибку иначе
-    }
-
     int randomIndex = std::rand() % words.size(); // √енераци€ случайного индекса
     return words[randomIndex]; // ¬озвращаем случайное слово
 }
 
-//int randint(int range) { //функци€ дл€ выбора рандомной цифры в диапазоне
-//    return rand() % range;
-//}
-//
-//string Get_Random_Word(string filename) {
-//    fstream file;
-//    file.open(filename);
-//    string sentence, word;
-//    vector<string> words;
-//    while (std::getline(file, sentence)) { //записывание в вектор слов пока не достигнут конец файла
-//        std::stringstream text(sentence);
-//        while (text >> word) {
-//            words.push_back(word);
-//        }
-//    }
-//    file.close();
-//    int i = randint(words.size() - 1); //выбор рандомного индекса в векторе и возвращени€ слова под этим индексом
-//    return words[i];
-//}
-
-HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE); //получаем дескриптор консоли, чтобы работать с ней
-
 void GoToXY(short x, short y) { //перемещение курсора на позицию (x, y)
+    HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE); //получаем дескриптор консоли, чтобы работать с ней
     SetConsoleCursorPosition(hStdOut, { x, y });
 }
 
 void ConsoleCursorVisible(bool show, short size) {
+    HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE); //получаем дескриптор консоли, чтобы работать с ней
     CONSOLE_CURSOR_INFO struct_cursor_info; //переменна€ дл€ данных о курсоре
     GetConsoleCursorInfo(hStdOut, &struct_cursor_info); //получаем текущие данные о курсоре
     struct_cursor_info.bVisible = show; // редактирование видимости курсора
     struct_cursor_info.dwSize = size; // редактирование размер курсора
     SetConsoleCursorInfo(hStdOut, &struct_cursor_info); //примен€ем изменени€ к курсору
+}
+
+void PrintMenu(int x, int y, std::vector<string> menu, int choice) {
+    HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE); //получаем дескриптор консоли, чтобы работать с ней
+    GoToXY(x, y);
+    for (int i = 0; i < menu.size(); ++i) {
+        if (i == choice) {
+            SetConsoleTextAttribute(hStdOut, 2); // зелЄный цвет
+        }
+        else SetConsoleTextAttribute(hStdOut, 8); //серый цвет
+        GoToXY(x, y++);
+        cout << menu[i] << endl;
+    }
+}
+
+string MenuChoice(int x, int y, std::vector<string> menu) {
+    int choice = 0;
+    char ch;
+    while (true) {
+        PrintMenu(x, y, menu, choice);
+        ch = _getch();
+        Keyboard_Keys key = static_cast<Keyboard_Keys>(ch);
+        switch (key) {
+        case Keyboard_Keys::ESCAPE:
+            exit(0);
+        case Keyboard_Keys::UP:
+            if (choice > 0) {
+                --choice;
+            }
+            break;
+        case Keyboard_Keys::DOWN:
+            if (choice < menu.size() - 1) {
+                ++choice;
+            }
+            break;
+        case Keyboard_Keys::ENTER:
+            system("CLS");
+            return menu[choice];
+        default:
+            break;
+        }
+    }
 }
 
 vector<vector<string>> CreateField(int height, int width) {
@@ -129,11 +137,7 @@ void PrintField(int x, int y, vector<vector<std::string>> field, const string& h
     }
 }
 
-<<<<<<< HEAD
-void Print_Keyboard(int x, int y,const vector<vector<string>> keyboard, vector<vector<string>>& field,
-=======
 void PrintKeyboard(int x, int y, vector<vector<string>> keyboard, vector<vector<string>>& field,
->>>>>>> c11a1c9ab0438d7883c0c73eb78d17ca057415d6
     int& row, int& column, int& field_row, int& field_column, string hidden_word, string& entered_word, vector<bool>& check_for_painting_line) { //функци€ дл€ отрисовки клавиатуры + управлени€ клавиатурой и изменени€ пол€ со словами
     for (int i = 0; i < keyboard.size(); ++i) {
         for (int j = 0; j < keyboard[i].size(); ++j) {
@@ -231,4 +235,10 @@ void PrintKeyboard(int x, int y, vector<vector<string>> keyboard, vector<vector<
     default:
         break;
     }
+}
+
+
+
+void AppAttempt(vector<vector<string>>& field) {
+    field.push_back(vector<string>(field[0].size(), " "));
 }

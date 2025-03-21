@@ -9,183 +9,52 @@
 #include <random>
 #include <cstdlib>
 #include <stdexcept>
-#include "Constants/Constants.h"
-#include "Functions/Functions.h"
+#include "Constants\Constants.h"
+#include "Functions\Functions.h"
 
 using std::vector;
 using std::fstream;
 using std::string;
+using std::stringstream;
 using std::cout;
 using std::endl;
 using std::min;
 
+HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE); //получаем дескриптор консоли, чтобы работать с ней
 
 int main() {
     SetConsoleTitle(L"Игра в слова");
     system("CLS");
     setlocale(0, "Rus");
     ConsoleCursorVisible(false, 100);
-    vector<string> menu_of_languages = { "ENGLISH", "RUSSIAN" };
-    int active_menu = 0;
 
 
-    int x = 50, y = 10;
-    GoToXY(x, y);
+    GoToXY(50, 10);
     cout << "WELCOME TO YOUR GAME";
-    GoToXY(x, y + 1);
+    GoToXY(50, 11);
     cout << "CHOOSE YOUR LANGUAGE";
 
 
-    string language = "";
+    string language = MenuChoice(56, 12, menu_of_languages);
+    GoToXY(50, 10);
+    SetConsoleTextAttribute(hStdOut, FOREGROUND_BLUE); //синий
 
 
-    char ch;
-    
-    while (true) {
-        int x = 56, y = 12;
-        GoToXY(x, y);
-
-        for (int i = 0; i < menu_of_languages.size(); ++i) {
-            if (i == active_menu) {
-                SetConsoleTextAttribute(hStdOut, 2); // зелёный цвет
-            }
-            else SetConsoleTextAttribute(hStdOut, 8); //серый цвет
-            GoToXY(x, y++);
-            cout << menu_of_languages[i] << endl;
-        }
-
-        ch = _getch();
-        Keyboard_Keys key = static_cast<Keyboard_Keys>(ch);
-        switch (key) {
-        case Keyboard_Keys::ESCAPE:
-            exit(0);
-        case Keyboard_Keys::UP:
-            if (active_menu > 0) {
-                --active_menu;
-            }
-            break;
-        case Keyboard_Keys::DOWN:
-            if (active_menu < menu_of_languages.size() - 1) {
-                ++active_menu;
-            }
-            break;
-        case Keyboard_Keys::ENTER:
-            language = menu_of_languages[active_menu];
-            system("CLS");
-            break;
-        default:
-            break;
-        }
-        if (language != "") {
-            break;
-        }
-    }
-    
-    x = 50, y = 10;
-    GoToXY(x, y);
-    SetConsoleTextAttribute(hStdOut, 1); //синий
-    
-    vector<int> menu_of_options = {5, 6, 7 };
-    active_menu = 0;
-    int option = 0;
-
-    if (language == "RUSSIAN") {
-        cout << "ВЫБЕРИТЕ РЕЖИМ ИГРЫ";
-        while (true) {
-            x = 59, y = 11;
-            GoToXY(x, y);
-            for (int i = 0; i < menu_of_options.size(); ++i) {
-                if (i == active_menu) {
-                    SetConsoleTextAttribute(hStdOut, 2);
-                }
-                else SetConsoleTextAttribute(hStdOut, 8);
-                GoToXY(x, y++);
-                cout << menu_of_options[i] << endl;
-            }
-            ch = _getch();
-            Keyboard_Keys key = static_cast<Keyboard_Keys>(ch);
-            switch (key) {
-            case Keyboard_Keys::ESCAPE: //escape
-                exit(0);
-            case Keyboard_Keys::UP:
-                if (active_menu > 0) {
-                    --active_menu;
-                }
-                break;
-            case Keyboard_Keys::DOWN:
-                if (active_menu < menu_of_options.size() - 1) {
-                    ++active_menu;
-                }
-                break;
-            case Keyboard_Keys::ENTER:
-                option = menu_of_options[active_menu];
-                system("CLS");
-                break;
-            default:
-                break;
-            }
-            if (option != 0) {
-                break;
-            }
-        }
-    }
-
-
-    else if (language == "ENGLISH") {
-        cout << "CHOOSE GAME OPTION";
-        while (true) {
-            int x = 59, y = 11;
-            GoToXY(x, y);
-
-            for (int i = 0; i < menu_of_options.size(); ++i) {
-                if (i == active_menu) {
-                    SetConsoleTextAttribute(hStdOut, 2);
-                }
-                else SetConsoleTextAttribute(hStdOut, 8);
-                GoToXY(x, y++);
-                cout << menu_of_options[i] << endl;
-            }
-            ch = _getch();
-            Keyboard_Keys key = static_cast<Keyboard_Keys>(ch);
-            switch (key) {
-            case Keyboard_Keys::ESCAPE: //выход
-                exit(0);
-            case Keyboard_Keys::UP:
-                if (active_menu > 0) {
-                    --active_menu;
-                }
-                break;
-            case Keyboard_Keys::DOWN:
-                if (active_menu < menu_of_options.size() - 1) {
-                    ++active_menu;
-                }
-                break;
-
-            case Keyboard_Keys::ENTER:
-                option = menu_of_options[active_menu];
-                system("CLS");
-                break;
-
-            default:
-                break;
-            }
-            if (option != 0) {
-                break;
-            }
-        }
-    }
-
+    int letters = 0;
 
     int row = 0;
     int column = 0;
     int field_row = 0;
     int field_column = 0;
     string hidden_word, entered_word;
-    vector<vector<string>> field = CreateField(option, option);
-    vector<bool> check_for_painting_line(option, false);
 
     if (language == "RUSSIAN") {
-        switch (option) {
+        cout << "ВЫБЕРИТЕ РЕЖИМ ИГРЫ";
+        stringstream option(MenuChoice(50, 11, menu_of_options_Russian));
+        option >> letters;
+        vector<vector<string>> field = CreateField(letters, letters);
+        vector<bool> check_for_painting_line(letters, false);
+        switch (letters) {
         case 5:
             hidden_word = GetRandomWord("Dictionaries/Russian_5.txt");
             break;
@@ -198,14 +67,13 @@ int main() {
         default:
             break;
         }
-               
-        while(true) {
+        while (true) {
             PrintField(50, 1, field, hidden_word, check_for_painting_line);
             if (entered_word == hidden_word || field_row == field.size() - 1 && check_for_painting_line[field_row] == true) {
                 system("CLS");
                 break;
             }
-            PrintKeyboard(15, option * 2 + 1, Russian_keyboard, field, row, column, field_row, field_column, hidden_word, entered_word, check_for_painting_line);
+            PrintKeyboard(15, letters * 2 + 1, Russian_keyboard, field, row, column, field_row, field_column, hidden_word, entered_word, check_for_painting_line);
         }
         if (entered_word == hidden_word) {
             while (true) {
@@ -228,7 +96,12 @@ int main() {
             }
         }
     } else if (language == "ENGLISH") {
-        switch (option) {
+        cout << "CHOOSE GAME OPTION";
+        stringstream option(MenuChoice(50, 11, menu_of_options_English));
+        option >> letters;
+        vector<vector<string>> field = CreateField(letters, letters);
+        vector<bool> check_for_painting_line(letters, false);
+        switch (letters) {
         case 5:
             hidden_word = GetRandomWord("Dictionaries/English_5.txt");
             break;
@@ -244,10 +117,11 @@ int main() {
         while (true) {
             PrintField(50, 1, field, hidden_word, check_for_painting_line);
             if (entered_word == hidden_word || field_row == field.size() - 1 && check_for_painting_line[field_row] == true) {
+                SetConsoleTextAttribute(hStdOut, 8 | 8);
                 system("CLS");
                 break;
             }
-            PrintKeyboard(15, option * 2 + 1, English_keyboard, field, row, column, field_row, field_column, hidden_word, entered_word, check_for_painting_line);
+            PrintKeyboard(15, letters * 2 + 1, English_keyboard, field, row, column, field_row, field_column, hidden_word, entered_word, check_for_painting_line);
         }
         if (entered_word == hidden_word) {
             while (true) {
@@ -270,4 +144,4 @@ int main() {
             }
         }
     }
-}
+ }

@@ -69,7 +69,7 @@ int main() {
                     cout << "ВЫ УГАДАЛИ СЛОВО";
                     GoToXY(47, 12);
                     cout << "ЗАГАДННОЕ СЛОВО: " << hidden_word;
-                    if (MenuChoice(48, 13, ending_menu_Russian) == "ВЫХОД") {
+                    if (MenuChoice(48, 13, ending_menu_Russian) == "ВЫЙТИ") {
                         return 0;
                     }
                     else {
@@ -84,7 +84,7 @@ int main() {
                     cout << "ВЫ ПРОИГРАЛИ";
                     GoToXY(47, 11);
                     cout << "ЗАГАДННОЕ СЛОВО: " << hidden_word;
-                    if (MenuChoice(48, 12, ending_menu_Russian) == "ВЫХОД") {
+                    if (MenuChoice(48, 12, ending_menu_Russian) == "ВЫЙТИ") {
                         return 0;
                     }
                     else {

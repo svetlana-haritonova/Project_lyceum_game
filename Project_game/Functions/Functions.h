@@ -24,5 +24,7 @@ void PrintField(int x, int y, vector<vector<string>> field, const string& hidden
 void PrintKeyboard(int x, int y, vector<vector<string>> keyboard, vector<vector<string>>& field,
     int& row, int& column, int& field_row, int& field_column, string hidden_word, string& entered_word, vector<bool>& check_for_painting_line);  //функция для отрисовки клавиатуры + управления клавиатурой и изменения поля со словами
 
+bool EnterWord(int pos_keyboard_x, int pos_keyboard_y, int pos_field_x, int pos_field_y, vector<vector<string>> keyboard, vector<vector<string>>& field, string hidden_word, string& entered_word, vector<bool>& check_for_painting_line);
+
 void AppAttempt(vector<vector<string>>& field);
 #endif

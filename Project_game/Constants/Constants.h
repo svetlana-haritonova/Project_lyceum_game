@@ -8,6 +8,8 @@
 using std::vector;
 using std::string;
 
+#define STD_OUTPUT_HANDLE   ((DWORD)-11)
+
 #define FOREGROUND_BLUE      0x0001 // text color contains blue.
 #define FOREGROUND_GREEN     0x0002 // text color contains green.
 #define FOREGROUND_RED       0x0004 // text color contains red.
@@ -17,7 +19,7 @@ using std::string;
 #define BACKGROUND_RED       0x0040 // background color contains red.
 #define BACKGROUND_INTENSITY 0x0080 // background color is intensified.
 
-enum class Keyboard_Keys : char { //клавишы на клавиатуре и их код
+enum class Keyboard_Keys : int { //клавишы на клавиатуре и их код
     UP = 72,
     DOWN = 80,
     BACKSPACE = 8,
@@ -29,9 +31,13 @@ enum class Keyboard_Keys : char { //клавишы на клавиатуре и их код
 
 const vector<string> menu_of_languages = { "ENGLISH", "RUSSIAN" };
 
-const vector<string> menu_of_options_English = { "5 letters", "6 letters", "7 letters", };
+const vector<string> menu_of_options_English = { "5 LETTERS", "6 LETTERS", "7 LETTERS" };
 
-const vector<string> menu_of_options_Russian = { "5 букв", "6 букв", "7 букв", };
+const vector<string> menu_of_options_Russian = { "5 БУКВ", "6 БУКВ", "7 БУКВ", };
+
+const vector<string> ending_menu_Russian = { "НАЧАТЬ ЗАНОВО",  "ВЫЙТИ"};
+
+const vector<string> ending_menu_English = { "START AGAIN",  "EXIT" };
 
 const vector<vector<string>> English_keyboard = {
         {"q", "w", "e", "r", "t", "y", "u", "i", "o", "p"},

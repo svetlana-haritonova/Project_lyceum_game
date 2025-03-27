@@ -21,49 +21,49 @@ using std::endl;
 using std::min;
 using std::srand;
 
-string Game::GetRandomWord(const string& filename) { //функция для генерации рандомного слова
-    srand(static_cast<unsigned int>(std::time(nullptr))); // Инициализация генератора случайных чисел
+string Game::GetRandomWord(const string& filename) { //func for getting random word
+    srand(static_cast<unsigned int>(std::time(nullptr))); //initialization generation of random numbers
     fstream file;
     file.open(filename);
     string sentence, word;
     vector<string> words;
-    while (std::getline(file, sentence)) { //записывание в вектор слов пока не достигнут конец файла
+    while (std::getline(file, sentence)) { //put words from file to vector
         stringstream text(sentence);
         while (text >> word) {
             words.push_back(word);
         }
     }
     file.close();
-    int randomIndex = std::rand() % words.size(); // Генерация случайного индекса
-    return words[randomIndex]; // Возвращаем случайное слово
+    int randomIndex = std::rand() % words.size(); // generate random number in range
+    return words[randomIndex]; // return random word from file
 }
 
-void Game::GoToXY(int x, int y) { //перемещение курсора на позицию (x, y)
+void Game::GoToXY(int x, int y) { //moving cursore to (x, y)
     SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(x), static_cast<short>(y) });
 }
 
 void Game::ConsoleCursorVisible(bool show, short size) {
-    CONSOLE_CURSOR_INFO struct_cursor_info; //переменная для данных о курсоре
-    GetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &struct_cursor_info); //получаем текущие данные о курсоре
-    struct_cursor_info.bVisible = show; // редактирование видимости курсора
-    struct_cursor_info.dwSize = size; // редактирование размер курсора
-    SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &struct_cursor_info); //применяем изменения к курсору
+    CONSOLE_CURSOR_INFO struct_cursor_info; //a variable for cursor data
+    GetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &struct_cursor_info); //get current data of cursore
+    struct_cursor_info.bVisible = show; // edit cursore visibility
+    struct_cursor_info.dwSize = size; // edit cursore size
+    SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &struct_cursor_info); //make changes for cursor
 }
 
 
 
-string Game::MenuChoice(int x, int y, const std::vector<string>& menu) {
+string Game::MenuChoice(int x, int y, const std::vector<string>& menu) { //get choosing option from menu
     int choice = 0;
     int ch;
     while (true) {
-        PrintMenu(x, y, menu, choice);
+        PrintMenu(x, y, menu, choice); //print menu while we don`t choose option
         ch = _getch();
         Keyboard_Keys key = static_cast<Keyboard_Keys>(ch);
         switch (key) {
         case Keyboard_Keys::ESCAPE:
             exit(0);
         case Keyboard_Keys::UP:
-            if (choice > 0) {
+            if (choice > 0) { //some boards 
                 --choice;
             }
             break;
@@ -82,7 +82,7 @@ string Game::MenuChoice(int x, int y, const std::vector<string>& menu) {
 }
 
 vector<vector<string>> Game::CreateField(int height, int width) {
-    vector<vector<string>> field(height, vector<string>(width, " ")); //создание поля
+    vector<vector<string>> field(height, vector<string>(width, " ")); //creating field
     return field;
 }
 

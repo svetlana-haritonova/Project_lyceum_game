@@ -9,21 +9,21 @@ using std::vector;
 using std::cout;
 using std::endl;
 
-void Game::PrintMenu(int x, int y, const vector<string>&menu, int choice) {
+void Game::PrintMenu(int x, int y, const vector<string>&menu, int choice) { //func for drawing different menu
     GoToXY(x, y);
     for (int i = 0; i < menu.size(); ++i) {
         GoToXY(x, y + i);
         if (i == choice) {
-            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_BLACK | BACKGROUND_WHITE);
+            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_BLACK | BACKGROUND_WHITE); //if we take cursor on option we highlight it
         }
         else SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_WHITE);
         cout << menu[i] << endl;
     }
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_WHITE | BACKGROUND_BLACK);
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_WHITE | BACKGROUND_BLACK); //return simple drawing parameters
 }
 
-void Game::PrintField(int x, int y, const vector<vector<std::string>>& field, const string& hidden_word, const vector<bool>& check_for_paint_line) { //функция для отрисовки поля работает для разного количества букв
-    int const_x = x, const_y = y;
+void Game::PrintField(int x, int y, const vector<vector<std::string>>& field, const string& hidden_word, const vector<bool>& check_for_paint_line) { //func for print field
+    int begin_x = x, begin_y = y;
     for (int i = 0; i < field.size(); ++i) {
         for (int j = 0; j < field[0].size(); ++j) {
             SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_GREY);
@@ -52,11 +52,11 @@ void Game::PrintField(int x, int y, const vector<vector<std::string>>& field, co
             GoToXY(x, y);
             cout << "|_____|";
             x += 7;
-            y = const_y;
+            y = begin_y;
         }
         y = y + 4;
-        const_y = y;
-        x = const_x;
+        begin_y = y;
+        x = begin_x;
     }
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_GREY);
 }

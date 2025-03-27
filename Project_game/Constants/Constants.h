@@ -8,18 +8,18 @@
 using std::vector;
 using std::string;
 
-#define STD_OUTPUT_HANDLE   ((DWORD)-11)
+#define STD_OUTPUT_HANDLE   ((DWORD)-11)  //constant for getting console descriptor
 
-#define FOREGROUND_BLUE      0x0001 // text color contains blue.
-#define FOREGROUND_GREEN     0x0002 // text color contains green.
-#define FOREGROUND_RED       0x0004 // text color contains red.
-#define FOREGROUND_INTENSITY 0x0008 // text color is intensified.
-#define BACKGROUND_BLUE      0x0010 // background color contains blue.
-#define BACKGROUND_GREEN     0x0020 // background color contains green.
-#define BACKGROUND_RED       0x0040 // background color contains red.
-#define BACKGROUND_INTENSITY 0x0080 // background color is intensified.
+#define FOREGROUND_BLUE      0x0001 // text colors
+#define FOREGROUND_GREEN     0x0002
+#define FOREGROUND_RED       0x0004
+#define FOREGROUND_INTENSITY 0x0008 // intensified text color
+#define BACKGROUND_BLUE      0x0010 // background color
+#define BACKGROUND_GREEN     0x0020
+#define BACKGROUND_RED       0x0040
+#define BACKGROUND_INTENSITY 0x0080 // intensified background color
 #define FOREGROUND_BLACK       0
-#define FOREGROUND_GREY        FOREGROUND_INTENSITY
+#define FOREGROUND_GREY        FOREGROUND_INTENSITY // mixed text and background colors 
 #define FOREGROUND_PINK        FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_INTENSITY
 #define FOREGROUND_PURPLE        FOREGROUND_RED | FOREGROUND_BLUE
 #define FOREGROUND_WHITE            FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY
@@ -27,9 +27,9 @@ using std::string;
 #define BACKGROUND_PURPLE           BACKGROUND_RED | BACKGROUND_BLUE | BACKGROUND_INTENSITY
 #define BACKGROUND_BLACK            0
 
-const int CURSOR_SIZE = 100;
+const int CURSOR_SIZE = 100; //cursor size
 
-enum class Coordinates : int {
+enum class Coordinates : int { // coordinates game`s attributes
     STATUS_X = 50,
     STATUS_Y = 10,
     MENU_X = 56,
@@ -40,7 +40,7 @@ enum class Coordinates : int {
     KEYBOARD_Y = 1
 };
 
-enum class Keyboard_Keys : int { //клавишы на клавиатуре и их код
+enum class Keyboard_Keys : int { //buttons on keyboard and its number
     UP = 72,
     DOWN = 80,
     BACKSPACE = 8,
@@ -49,6 +49,8 @@ enum class Keyboard_Keys : int { //клавишы на клавиатуре и их код
     ENTER = 13,
     ESCAPE = 27
 };
+
+//menu
 
 const vector<string> menu_of_languages = { "ENGLISH", "RUSSIAN" };
 
@@ -59,6 +61,8 @@ const vector<string> menu_of_options_Russian = { "5 БУКВ", "6 БУКВ", "7 БУКВ", }
 const vector<string> ending_menu_Russian = { "НАЧАТЬ ЗАНОВО",  "    ВЫЙТИ    "};
 
 const vector<string> ending_menu_English = { "START AGAIN",  "   EXIT    " };
+
+//keyboards
 
 const vector<vector<string>> English_keyboard = {
         {"q", "w", "e", "r", "t", "y", "u", "i", "o", "p"},

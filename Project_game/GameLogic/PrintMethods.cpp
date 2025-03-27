@@ -22,8 +22,8 @@ void Game::PrintMenu(int x, int y, const vector<string>&menu, int choice) { //fu
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_WHITE | BACKGROUND_BLACK); //return simple drawing parameters
 }
 
-void Game::PrintField(int x, int y, const vector<vector<std::string>>& field, const string& hidden_word, const vector<bool>& check_for_paint_line) { //func for print field
-    int begin_x = x, begin_y = y;
+void Game::PrintField(int x, int y, const vector<vector<std::string>>& field, const string& hidden_word, const vector<bool>& check_for_paint_line) { //a function for rendering a field. Works for a different number of letters
+    int const_x = x, const_y = y;
     for (int i = 0; i < field.size(); ++i) {
         for (int j = 0; j < field[0].size(); ++j) {
             SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_GREY);
@@ -62,16 +62,16 @@ void Game::PrintField(int x, int y, const vector<vector<std::string>>& field, co
 }
 
 void Game::PrintKeyboard(int x, int y, vector<vector<string>> keyboard, vector<vector<string>>& field,
-    int& row, int& column, int& field_row, int& field_column, string hidden_word, string& entered_word, vector<bool>& check_for_painting_line) { //функция для отрисовки клавиатуры + управления клавиатурой и изменения поля со словами
+    int& row, int& column, int& field_row, int& field_column, string hidden_word, string& entered_word, vector<bool>& check_for_painting_line) { //a function for rendering the keyboard + keyboard controlling and changing the word fields
     for (int i = 0; i < keyboard.size(); ++i) {
         for (int j = 0; j < keyboard[i].size(); ++j) {
-            GoToXY(x + j * 3, y + i * 2); //j * 3 чтобы было расстояние для буквы и скобки, i * 2 опускаемся вниз
-            if (keyboard[i][j] != " ") { //проверяем что мы не выводим пробелы
-                if (i == row && j == column) { //выводим клавиатуру, если мы указывем на какую-то букву на консоли, подсвечиваем её
+            GoToXY(x + j * 3, y + i * 2); //j * 3 a distance for the letter and the bracket, i * 2 go down
+            if (keyboard[i][j] != " ") { //check that we are not displaying spaces
+                if (i == row && j == column) { //display the keyboard. If we point to a letter on the console, we highlight it.
                     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 2);
                     cout << "[" << keyboard[i][j] << "]";
                 }
-                else { //остальные печатаем просто серым
+                else { //print others in grey
                     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 8);
                     cout << "[" << keyboard[i][j] << "]";
                 }
@@ -85,7 +85,7 @@ void Game::PrintKeyboard(int x, int y, vector<vector<string>> keyboard, vector<v
 void Game::PrintIntrodaction() {
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_PINK);
     GoToXY(static_cast<int>(Coordinates::STATUS_X), static_cast<int>(Coordinates::STATUS_Y));
-    cout << "WELCOME TO YOUR GAME";
+    cout << "WELCOME TO  'LE_WORD'";
     GoToXY(static_cast<int>(Coordinates::STATUS_X), static_cast<int>(Coordinates::STATUS_Y) + 1);
     cout << "CHOOSE YOUR LANGUAGE";
 }
@@ -94,13 +94,16 @@ void Game::PrintGameResult(const string& language, bool win, const string& hidde
     if (win) {
         if (language == "RUSSIAN") {
             while (true) {
-                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_GREEN);
                 GoToXY(static_cast<int>(Coordinates::STATUS_X), static_cast<int>(Coordinates::STATUS_Y));
                 cout << "      ПОЗДРАВЛЯЕМ!";
                 GoToXY(static_cast<int>(Coordinates::STATUS_X), static_cast<int>(Coordinates::STATUS_Y) + 1);
                 cout << "    ВЫ УГАДАЛИ СЛОВО";
+                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
                 GoToXY(static_cast<int>(Coordinates::STATUS_X), static_cast<int>(Coordinates::STATUS_Y) + 2);
-                cout << "ЗАГАДННОЕ СЛОВО: " << hidden_word;
+                cout << "ЗАГАДННОЕ СЛОВО: ";
+                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_GREEN | FOREGROUND_INTENSITY);
+                cout << hidden_word;
                 if (MenuChoice(static_cast<int>(Coordinates::MENU_X), static_cast<int>(Coordinates::MENU_Y) + 1, ending_menu_Russian) == "ВЫЙТИ") {
                     exit(0);
                 }
@@ -112,12 +115,15 @@ void Game::PrintGameResult(const string& language, bool win, const string& hidde
         else {
             while (true) {
                 GoToXY(static_cast<int>(Coordinates::STATUS_X), static_cast<int>(Coordinates::STATUS_Y));
-                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_GREEN);
                 cout << "   CONGRATULATIONS!";
                 GoToXY(static_cast<int>(Coordinates::STATUS_X), static_cast<int>(Coordinates::STATUS_Y) + 1);
                 cout << " YOU GUESSED THE WORD";
+                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
                 GoToXY(static_cast<int>(Coordinates::STATUS_X), static_cast<int>(Coordinates::STATUS_Y) + 2);
-                cout << " HIDDEN WORD : " << hidden_word;
+                cout << " HIDDEN WORD : ";
+                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_GREEN | FOREGROUND_INTENSITY);
+                cout << hidden_word;
                 GoToXY(static_cast<int>(Coordinates::STATUS_X), static_cast<int>(Coordinates::STATUS_Y) + 3);
                 if (MenuChoice(static_cast<int>(Coordinates::MENU_X), static_cast<int>(Coordinates::MENU_Y) + 1, ending_menu_English) == "EXIT") {
                     exit(0);
@@ -131,11 +137,14 @@ void Game::PrintGameResult(const string& language, bool win, const string& hidde
     else {
         if (language == "RUSSIAN") {
             while (true) {
-                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_RED);
                 GoToXY(static_cast<int>(Coordinates::STATUS_X), static_cast<int>(Coordinates::STATUS_Y));
                 cout << "      ВЫ ПРОИГРАЛИ ";
+                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
                 GoToXY(static_cast<int>(Coordinates::STATUS_X), static_cast<int>(Coordinates::STATUS_Y) + 1);
-                cout << "ЗАГАДННОЕ СЛОВО: " << hidden_word;
+                cout << "ЗАГАДННОЕ СЛОВО: ";
+                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_RED | FOREGROUND_INTENSITY);
+                cout << hidden_word;
                 if (MenuChoice(static_cast<int>(Coordinates::MENU_X), static_cast<int>(Coordinates::MENU_Y), ending_menu_Russian) == "НАЧАТЬ ЗАНОВО") {
                     break;
                 }
@@ -146,11 +155,14 @@ void Game::PrintGameResult(const string& language, bool win, const string& hidde
         }
         else {
             while (true) {
-                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_RED);
                 GoToXY(static_cast<int>(Coordinates::STATUS_X), static_cast<int>(Coordinates::STATUS_Y));
                 cout << "      YOU'VE LOST";
+                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
                 GoToXY(static_cast<int>(Coordinates::STATUS_X), static_cast<int>(Coordinates::STATUS_Y) + 1);
-                cout << "   HIDDEN WORD: " << hidden_word;
+                cout << "   HIDDEN WORD: ";
+                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_RED | FOREGROUND_INTENSITY);
+                cout << hidden_word;
                 if (MenuChoice(static_cast<int>(Coordinates::MENU_X), static_cast<int>(Coordinates::MENU_Y), ending_menu_English) == "START AGAIN") {
                     break;
                 }

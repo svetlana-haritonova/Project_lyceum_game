@@ -1,5 +1,5 @@
 #include "Game.h"
-#include "Constants/Constants.h"
+#include "../Constants/Constants.h"
 #include <windows.h>
 
 Game::Game() {

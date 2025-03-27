@@ -9,7 +9,7 @@
 #include <random>
 #include <cstdlib>
 #include <stdexcept>
-#include "Game.h"
+#include "GameLogic/Game.h"
 #include "Constants/Constants.h"
 
 using std::vector;

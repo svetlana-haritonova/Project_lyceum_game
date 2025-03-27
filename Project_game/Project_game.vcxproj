@@ -127,10 +127,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Game.cpp" />
-    <ClCompile Include="GameMethods.cpp" />
-    <ClCompile Include="PrintMethods.cpp" />
-    <ClCompile Include="Project_game.cpp" />
+    <ClCompile Include="GameLogic\Game.cpp" />
+    <ClCompile Include="GameLogic\GameMethods.cpp" />
+    <ClCompile Include="GameLogic\PrintMethods.cpp" />
+    <ClCompile Include="Main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\ОтчётКТ1.md" />
@@ -147,7 +147,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Constants\Constants.h" />
-    <ClInclude Include="Game.h" />
+    <ClInclude Include="GameLogic\Game.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

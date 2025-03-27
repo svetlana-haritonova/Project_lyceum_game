@@ -1,7 +1,8 @@
 #include "Game.h"
-#include "Constants/Constants.h"
+#include "../Constants/Constants.h"
 #include <windows.h>
 #include <iostream>
+#include <conio.h>
 
 using std::string;
 using std::vector;
@@ -79,6 +80,7 @@ void Game::PrintKeyboard(int x, int y, vector<vector<string>> keyboard, vector<v
         cout << endl;
     }
 }
+
 
 void Game::PrintIntrodaction() {
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_PINK);

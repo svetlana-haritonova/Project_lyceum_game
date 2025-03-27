@@ -30,7 +30,7 @@ void Game::PrintField(int x, int y, const vector<vector<std::string>>& field, co
             SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_GREY);
             cout << "_______";
             ++y;
-            if (check_for_paint_line[i]) {
+            if (check_for_paint_line[i]) { //if we save word paint it
                 if (std::find(hidden_word.begin(), hidden_word.end(), field[i][j][0]) != hidden_word.end()) {
                     if (field[i][j][0] == hidden_word[j]) { //take [0] because field string vector
                         SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_WHITE | BACKGROUND_GREEN);

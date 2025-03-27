@@ -38,6 +38,7 @@ enum class Coordinates : int { // coordinates game`s attributes
     FIELD_X = 50,
     FIELD_Y = 1,
     KEYBOARD_X = 10,
+    KEYBOARD_Y = 10,
 };
 
 enum class Keyboard_Keys : int { //buttons on keyboard and its number

@@ -215,7 +215,7 @@ void Game::SetGameAttributes(const string& language, string& hidden_word, vector
         default:
             break;
         }
-        if (EnterWord(static_cast<int>(Coordinates::KEYBOARD_X), letters * 2, static_cast<int>(Coordinates::FIELD_X), static_cast<int>(Coordinates::FIELD_Y), Russian_keyboard, field, hidden_word, entered_word, check_for_painting_line)) {
+        if (EnterWord(static_cast<int>(Coordinates::KEYBOARD_X), static_cast<int>(Coordinates::KEYBOARD_Y), static_cast<int>(Coordinates::FIELD_X), static_cast<int>(Coordinates::FIELD_Y), Russian_keyboard, field, hidden_word, entered_word, check_for_painting_line)) {
             PrintGameResult(language, true, hidden_word, ending_menu_Russian); //if we guess hidden word print game result with parametr win as true
         }
         else {
@@ -241,7 +241,7 @@ void Game::SetGameAttributes(const string& language, string& hidden_word, vector
         default:
             break;
         }
-        if (EnterWord(static_cast<int>(Coordinates::KEYBOARD_X), letters * 2, static_cast<int>(Coordinates::FIELD_X), static_cast<int>(Coordinates::FIELD_Y), English_keyboard, field, hidden_word, entered_word, check_for_painting_line)) {
+        if (EnterWord(static_cast<int>(Coordinates::KEYBOARD_X), static_cast<int>(Coordinates::KEYBOARD_Y), static_cast<int>(Coordinates::FIELD_X), static_cast<int>(Coordinates::FIELD_Y), English_keyboard, field, hidden_word, entered_word, check_for_painting_line)) {
             PrintGameResult(language, true, hidden_word, ending_menu_English);
         }
         else {

@@ -9,9 +9,9 @@ using std::vector;
 
 class Game {
 public:
+
 	Game(); //constructor
 	void Run();
-
 
 private:
 
@@ -20,27 +20,27 @@ private:
 	string entered_word;
 	string hidden_word;
 	vector<vector<string>> field;
-	vector<bool> check_for_painting_line;
+	vector<bool> check_for_painting_line; //bool vector which fixsiruet when we save word
 	int letters;
 
-	//methods
+	//methods, private because use when only in class
 
-	string GetRandomWord(const string& filename); //функция для генерации рандомного слова
+	string GetRandomWord(const string& filename); //func for generate randon word
 
-	void GoToXY(int x, int y); //перемещение курсора на позицию (x, y)
+	void GoToXY(int x, int y); //move cursor to (x, y)
 
-	void ConsoleCursorVisible(bool show, short size); //изменение курсора на консоли
+	void ConsoleCursorVisible(bool show, short size); //cursor`s changing
 
 	void PrintMenu(int x, int y, const vector<string>& menu, int choice);
 
 	string MenuChoice(int x, int y, const vector<string>& menu);
 
-	vector<vector<string>> CreateField(int height, int width); //создание поля
+	vector<vector<string>> CreateField(int height, int width);
 
-	void PrintField(int x, int y, const vector<vector<std::string>>& field, const string& hidden_word, const vector<bool>& check_for_paint_line); //функция для отрисовки поля работает для разного количества букв
+	void PrintField(int x, int y, const vector<vector<std::string>>& field, const string& hidden_word, const vector<bool>& check_for_paint_line);
 
 	void PrintKeyboard(int x, int y, vector<vector<string>> keyboard, vector<vector<string>>& field,
-		int& row, int& column, int& field_row, int& field_column, string hidden_word, string& entered_word, vector<bool>& check_for_painting_line);  //функция для отрисовки клавиатуры + управления клавиатурой и изменения поля со словами
+		int& row, int& column, int& field_row, int& field_column, string hidden_word, string& entered_word, vector<bool>& check_for_painting_line);
 
 	bool EnterWord(int pos_keyboard_x, int pos_keyboard_y, int pos_field_x, int pos_field_y, const vector<vector<string>>& keyboard, vector<vector<string>>& field, const string& hidden_word, string& entered_word, vector<bool>& check_for_painting_line);
 

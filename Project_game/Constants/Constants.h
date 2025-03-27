@@ -27,16 +27,17 @@ using std::string;
 #define BACKGROUND_PURPLE           BACKGROUND_RED | BACKGROUND_BLUE | BACKGROUND_INTENSITY
 #define BACKGROUND_BLACK            0
 
+const int CURSOR_SIZE = 100;
+
 enum class Coordinates : int {
-    WELCOME_X = 50,
-    WELCOME_Y = 10,
+    STATUS_X = 50,
+    STATUS_Y = 10,
     MENU_X = 56,
     MENU_Y = 12,
     FIELD_X = 50,
     FIELD_Y = 1,
     KEYBOARD_X = 10,
-    KEYBOARD_Y = 1,
-   // CURSOR_SIZE = 100
+    KEYBOARD_Y = 1
 };
 
 enum class Keyboard_Keys : int { //клавишы на клавиатуре и их код

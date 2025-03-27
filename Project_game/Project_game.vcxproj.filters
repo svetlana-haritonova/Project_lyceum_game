@@ -2,7 +2,9 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="Project_game.cpp" />
-    <ClCompile Include="Functions\Functions.cpp" />
+    <ClCompile Include="Game.cpp" />
+    <ClCompile Include="PrintMethods.cpp" />
+    <ClCompile Include="GameMethods.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\ОтчётКТ1.md" />
@@ -18,7 +20,7 @@
     <Text Include="Dictionaries\English_6.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Functions\Functions.h" />
     <ClInclude Include="Constants\Constants.h" />
+    <ClInclude Include="Game.h" />
   </ItemGroup>
 </Project>

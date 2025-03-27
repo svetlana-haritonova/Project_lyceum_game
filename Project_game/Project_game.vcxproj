@@ -127,7 +127,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Functions\Functions.cpp" />
+    <ClCompile Include="Game.cpp" />
+    <ClCompile Include="GameMethods.cpp" />
+    <ClCompile Include="PrintMethods.cpp" />
     <ClCompile Include="Project_game.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -145,7 +147,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Constants\Constants.h" />
-    <ClInclude Include="Functions\Functions.h" />
+    <ClInclude Include="Game.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

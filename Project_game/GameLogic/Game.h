@@ -17,6 +17,7 @@ private:
 
 	//attributes
 
+	string language;
 	string entered_word;
 	string hidden_word;
 	vector<vector<string>> field;

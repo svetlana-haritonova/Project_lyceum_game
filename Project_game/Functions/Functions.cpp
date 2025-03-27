@@ -14,19 +14,21 @@
 
 using std::vector;
 using std::fstream;
+using std::stringstream;
 using std::string;
 using std::cout;
 using std::endl;
 using std::min;
+using std::srand;
 
 string GetRandomWord(const string& filename) { //функция для генерации рандомного слова
-    std::srand(static_cast<unsigned int>(std::time(nullptr))); // Инициализация генератора случайных чисел
+    srand(static_cast<unsigned int>(std::time(nullptr))); // Инициализация генератора случайных чисел
     fstream file;
     file.open(filename);
     string sentence, word;
     vector<string> words;
     while (std::getline(file, sentence)) { //записывание в вектор слов пока не достигнут конец файла
-        std::stringstream text(sentence);
+        stringstream text(sentence);
         while (text >> word) {
             words.push_back(word);
         }
@@ -37,33 +39,31 @@ string GetRandomWord(const string& filename) { //функция для генерации рандомног
 }
 
 void GoToXY(short x, short y) { //перемещение курсора на позицию (x, y)
-    HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE); //получаем дескриптор консоли, чтобы работать с ней
-    SetConsoleCursorPosition(hStdOut, { x, y });
+    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { x, y });
 }
 
 void ConsoleCursorVisible(bool show, short size) {
-    HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE); //получаем дескриптор консоли, чтобы работать с ней
     CONSOLE_CURSOR_INFO struct_cursor_info; //переменная для данных о курсоре
-    GetConsoleCursorInfo(hStdOut, &struct_cursor_info); //получаем текущие данные о курсоре
+    GetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &struct_cursor_info); //получаем текущие данные о курсоре
     struct_cursor_info.bVisible = show; // редактирование видимости курсора
     struct_cursor_info.dwSize = size; // редактирование размер курсора
-    SetConsoleCursorInfo(hStdOut, &struct_cursor_info); //применяем изменения к курсору
+    SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &struct_cursor_info); //применяем изменения к курсору
 }
 
-void PrintMenu(int x, int y, std::vector<string> menu, int choice) {
-    HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE); //получаем дескриптор консоли, чтобы работать с ней
+void PrintMenu(int x, int y,const vector<string>& menu, int choice) {
     GoToXY(x, y);
     for (int i = 0; i < menu.size(); ++i) {
+        GoToXY(x, y + i);
         if (i == choice) {
-            SetConsoleTextAttribute(hStdOut, 2); // зелёный цвет
+            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_BLACK | BACKGROUND_WHITE);
         }
-        else SetConsoleTextAttribute(hStdOut, 8); //серый цвет
-        GoToXY(x, y++);
+        else SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_WHITE);
         cout << menu[i] << endl;
     }
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_WHITE | BACKGROUND_BLACK);
 }
 
-string MenuChoice(int x, int y, std::vector<string> menu) {
+string MenuChoice(int x, int y,const std::vector<string>& menu) {
     int choice = 0;
     int ch;
     while (true) {
@@ -98,25 +98,25 @@ vector<vector<string>> CreateField(int height, int width) {
 }
 
 
-void PrintField(int x, int y, vector<vector<std::string>> field, const string& hidden_word, vector<bool> check_for_paint_line) { //функция для отрисовки поля работает для разного количества букв
+void PrintField(int x, int y, const vector<vector<std::string>>& field,const string &hidden_word,const vector<bool>& check_for_paint_line) { //функция для отрисовки поля работает для разного количества букв
     int const_x = x, const_y = y;
     for (int i = 0; i < field.size(); ++i) {
         for (int j = 0; j < field[0].size(); ++j) {
-            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 8);
+            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_GREY);
             GoToXY(x, y);
             cout << "_______";
             ++y;
-            if (check_for_paint_line[i] == true) {
+            if (check_for_paint_line[i]) {
                 if (std::find(hidden_word.begin(), hidden_word.end(), field[i][j][0]) != hidden_word.end()) {
                     if (field[i][j][0] == hidden_word[j]) {
-                        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7 | BACKGROUND_GREEN);
+                        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), (FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE) | BACKGROUND_GREEN);
                     }
                     else {
-                        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7 | BACKGROUND_RED | BACKGROUND_GREEN);
+                        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), (FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE) | (BACKGROUND_RED | BACKGROUND_GREEN));
                     }
                 }
                 else {
-                    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7 | BACKGROUND_RED);
+                    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), (FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE) | BACKGROUND_RED);
                 }
             }
             GoToXY(x, y);
@@ -127,14 +127,14 @@ void PrintField(int x, int y, vector<vector<std::string>> field, const string& h
             ++y;
             GoToXY(x, y);
             cout << "|_____|";
-            x = x + 7;
-            ++y;
+            x += 7;
             y = const_y;
         }
-        const_y = y + 4;
-        y = const_y;
+        y = y + 4;
+        const_y = y;
         x = const_x;
     }
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_GREY);
 }
 
 void PrintKeyboard(int x, int y, vector<vector<string>> keyboard, vector<vector<string>>& field,
@@ -157,16 +157,15 @@ void PrintKeyboard(int x, int y, vector<vector<string>> keyboard, vector<vector<
     }
 }
 
-
-bool EnterWord(int pos_keyboard_x, int pos_keyboard_y, int pos_field_x, int pos_field_y, vector<vector<string>> keyboard, vector<vector<string>> &field, string hidden_word, string& entered_word, vector<bool>& check_for_painting_line) {
+bool EnterWord(int pos_keyboard_x, int pos_keyboard_y, int pos_field_x, int pos_field_y,const vector<vector<string>>& keyboard, vector<vector<string>> &field,const string& hidden_word, string& entered_word, vector<bool>& check_for_painting_line) {
     int row = 0;
     int column = 0;
     int field_row = 0;
     int field_column = 0;
     int ch;
     while (true) {
-        PrintKeyboard(pos_keyboard_x, pos_keyboard_y, keyboard, field, row, column, field_row, field_column, hidden_word, entered_word, check_for_painting_line);
         PrintField(pos_field_x, pos_field_y, field, hidden_word, check_for_painting_line);
+        PrintKeyboard(pos_keyboard_x, pos_keyboard_y, keyboard, field, row, column, field_row, field_column, hidden_word, entered_word, check_for_painting_line);
         ch = _getch();
         Keyboard_Keys key = static_cast<Keyboard_Keys>(ch); // Преобразуем значение ch в Keyboard_Keys
 
@@ -226,10 +225,12 @@ bool EnterWord(int pos_keyboard_x, int pos_keyboard_y, int pos_field_x, int pos_
                     entered_word += field[field_row][i];
                 }
                 if (entered_word == hidden_word) {
+                    PrintField(pos_field_x, pos_field_y, field, hidden_word, check_for_painting_line);
                     system("CLS");
                     return true;
                 }
                 else if (field_row == field.size() - 1 && check_for_painting_line[field_row] == true) {
+                    PrintField(pos_field_x, pos_field_y, field, hidden_word, check_for_painting_line);
                     system("CLS");
                     return false;
                 }
@@ -258,7 +259,145 @@ bool EnterWord(int pos_keyboard_x, int pos_keyboard_y, int pos_field_x, int pos_
     }
 }
 
+void PrintIntrodaction() {
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_PINK);
+    GoToXY(50, 10);
+    cout << "WELCOME TO YOUR GAME";
+    GoToXY(50, 11);
+    cout << "CHOOSE YOUR LANGUAGE";
+}
 
-void AppAttempt(vector<vector<string>>& field) {
-    field.push_back(vector<string>(field[0].size(), " "));
+
+
+void SetGameAttributes(const string& language, string& hidden_word, vector<vector<string>>& field, vector<bool>& check_for_painting_line, int& letters) {
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_PURPLE);
+    GoToXY(50, 10);
+    if (language == "RUSSIAN") {
+        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_PURPLE);
+        cout << "ВЫБЕРИТЕ РЕЖИМ ИГРЫ";
+        stringstream option(MenuChoice(56, 11, menu_of_options_Russian));
+        option >> letters;
+        vector<vector<string>> field = CreateField(letters, letters);
+        vector<bool> check_for_painting_line(letters, false);
+        switch (letters) {
+        case 5:
+            hidden_word = GetRandomWord("Dictionaries/Russian_5.txt");
+            break;
+        case 6:
+            hidden_word = GetRandomWord("Dictionaries/Russian_6.txt");
+            break;
+        case 7:
+            hidden_word = GetRandomWord("Dictionaries/Russian_7.txt");
+            break;
+        default:
+            break;
+        }
+        string entered_word;
+        if (EnterWord(10, letters * 2 + 1, 50, 1, English_keyboard, field, hidden_word, entered_word, check_for_painting_line)) {
+            PrintGameResult(language, true, hidden_word, ending_menu_English);
+        }
+        else {
+            PrintGameResult(language, false, hidden_word, ending_menu_English);
+        }
+    }
+    else if (language == "ENGLISH") {
+        cout << "CHOOSE GAME OPTION";
+        stringstream option(MenuChoice(55, 11, menu_of_options_English));
+        option >> letters;
+        vector<vector<string>> field = CreateField(letters, letters);
+        vector<bool> check_for_painting_line(letters, false);
+        switch (letters) {
+        case 5:
+            hidden_word = GetRandomWord("Dictionaries/English_5.txt");
+            break;
+        case 6:
+            hidden_word = GetRandomWord("Dictionaries/English_6.txt");
+            break;
+        case 7:
+            hidden_word = GetRandomWord("Dictionaries/English_7.txt");
+            break;
+        default:
+            break;
+        }
+        string entered_word;
+        if (EnterWord(10, letters * 2 + 1, 50, 1, English_keyboard, field, hidden_word, entered_word, check_for_painting_line)) {
+            PrintGameResult(language, true, hidden_word, ending_menu_English);
+        }
+        else {
+            PrintGameResult(language, false, hidden_word, ending_menu_English);
+        }
+    }
+}
+
+
+void PrintGameResult(const string& language, bool win, const string& hidden_word, const vector<string>& ending_menu) {
+    if (win) {
+        if (language == "RUSSIAN") {
+            while (true) {
+                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+                GoToXY(50, 10);
+                cout << "ПОЗДРАВЛЯЕМ!";
+                GoToXY(48, 11);
+                cout << "ВЫ УГАДАЛИ СЛОВО";
+                GoToXY(47, 12);
+                cout << "ЗАГАДННОЕ СЛОВО: " << hidden_word;
+                if (MenuChoice(48, 13, ending_menu_Russian) == "ВЫЙТИ") {
+                    exit(0);
+                }
+                else {
+                    break;
+                }
+            }
+        }
+        else {
+            while (true) {
+                GoToXY(50, 10);
+                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+                cout << "CONGRATULATIONS!";
+                GoToXY(48, 11);
+                cout << "YOU GUESSED THE WORD";
+                GoToXY(49, 12);
+                cout << "HIDDEN WORD: " << hidden_word;
+                GoToXY(49, 12);
+                if (MenuChoice(48, 13, ending_menu_English) == "EXIT") {
+                    exit(0);
+                }
+                else {
+                    break;
+                }
+            }
+        }
+    }
+    else {
+        if (language == "RUSSIAN") {
+            while (true) {
+                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+                GoToXY(50, 10);
+                cout << "ВЫ ПРОИГРАЛИ";
+                GoToXY(47, 11);
+                cout << "ЗАГАДННОЕ СЛОВО: " << hidden_word;
+                if (MenuChoice(48, 12, ending_menu_Russian) == "ВЫЙТИ") {
+                    exit(0);
+                }
+                else {
+                    break;
+                }
+            }
+        }
+        else {
+            while (true) {
+                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+                GoToXY(50, 10);
+                cout << "YOU'VE LOST";
+                GoToXY(47, 11);
+                cout << "HIDDEN WORD: " << hidden_word;
+                if (MenuChoice(48, 12, ending_menu_English) == "EXIT") {
+                    exit(0);
+                }
+                else {
+                    break;
+                }
+            }
+        }
+    }
 }

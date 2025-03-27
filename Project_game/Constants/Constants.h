@@ -18,6 +18,26 @@ using std::string;
 #define BACKGROUND_GREEN     0x0020 // background color contains green.
 #define BACKGROUND_RED       0x0040 // background color contains red.
 #define BACKGROUND_INTENSITY 0x0080 // background color is intensified.
+#define FOREGROUND_BLACK       0
+#define FOREGROUND_GREY        FOREGROUND_INTENSITY
+#define FOREGROUND_PINK        FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_INTENSITY
+#define FOREGROUND_PURPLE        FOREGROUND_RED | FOREGROUND_BLUE
+#define FOREGROUND_WHITE            FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY
+#define BACKGROUND_WHITE            BACKGROUND_RED | BACKGROUND_GREEN | BACKGROUND_BLUE | BACKGROUND_INTENSITY
+#define BACKGROUND_PURPLE           BACKGROUND_RED | BACKGROUND_BLUE | BACKGROUND_INTENSITY
+#define BACKGROUND_BLACK            0
+
+enum class Coordinates : int {
+    WELCOME_X = 50,
+    WELCOME_Y = 10,
+    MENU_X = 56,
+    MENU_Y = 12,
+    FIELD_X = 50,
+    FIELD_Y = 1,
+    KEYBOARD_X = 10,
+    KEYBOARD_Y = 1,
+   // CURSOR_SIZE = 100
+};
 
 enum class Keyboard_Keys : int { //ÍÎ‡‚Ë¯˚ Ì‡ ÍÎ‡‚Ë‡ÚÛÂ Ë Ëı ÍÓ‰
     UP = 72,
@@ -35,9 +55,9 @@ const vector<string> menu_of_options_English = { "5 LETTERS", "6 LETTERS", "7 LE
 
 const vector<string> menu_of_options_Russian = { "5 ¡” ¬", "6 ¡” ¬", "7 ¡” ¬", };
 
-const vector<string> ending_menu_Russian = { "Õ¿◊¿“‹ «¿ÕŒ¬Œ",  "¬€…“»"};
+const vector<string> ending_menu_Russian = { "Õ¿◊¿“‹ «¿ÕŒ¬Œ",  "    ¬€…“»    "};
 
-const vector<string> ending_menu_English = { "START AGAIN",  "EXIT" };
+const vector<string> ending_menu_English = { "START AGAIN",  "   EXIT    " };
 
 const vector<vector<string>> English_keyboard = {
         {"q", "w", "e", "r", "t", "y", "u", "i", "o", "p"},

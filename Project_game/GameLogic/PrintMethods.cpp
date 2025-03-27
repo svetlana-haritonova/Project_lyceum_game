@@ -136,11 +136,11 @@ void Game::PrintGameResult(const string& language, bool win, const string& hidde
                 cout << "      ¬€ œ–Œ»√–¿À» ";
                 GoToXY(static_cast<int>(Coordinates::STATUS_X), static_cast<int>(Coordinates::STATUS_Y) + 1);
                 cout << "«¿√¿ƒÕÕŒ≈ —ÀŒ¬Œ: " << hidden_word;
-                if (MenuChoice(static_cast<int>(Coordinates::MENU_X), static_cast<int>(Coordinates::MENU_Y), ending_menu_Russian) == "¬€…“»") {
-                    exit(0);
+                if (MenuChoice(static_cast<int>(Coordinates::MENU_X), static_cast<int>(Coordinates::MENU_Y), ending_menu_Russian) == "Õ¿◊¿“‹ «¿ÕŒ¬Œ") {
+                    continue;
                 }
                 else {
-                    break;
+                    exit(0);
                 }
             }
         }
@@ -151,11 +151,11 @@ void Game::PrintGameResult(const string& language, bool win, const string& hidde
                 cout << "      YOU'VE LOST";
                 GoToXY(static_cast<int>(Coordinates::STATUS_X), static_cast<int>(Coordinates::STATUS_Y) + 1);
                 cout << "   HIDDEN WORD: " << hidden_word;
-                if (MenuChoice(static_cast<int>(Coordinates::MENU_X), static_cast<int>(Coordinates::MENU_Y), ending_menu_English) == "EXIT") {
-                    exit(0);
+                if (MenuChoice(static_cast<int>(Coordinates::MENU_X), static_cast<int>(Coordinates::MENU_Y), ending_menu_English) == "START AGAIN") {
+                    continue;
                 }
                 else {
-                    break;
+                    exit(0);
                 }
             }
         }

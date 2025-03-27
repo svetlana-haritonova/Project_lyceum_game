@@ -293,11 +293,11 @@ void SetGameAttributes(const string& language, string& hidden_word, vector<vecto
             break;
         }
         string entered_word;
-        if (EnterWord(10, letters * 2 + 1, 50, 1, English_keyboard, field, hidden_word, entered_word, check_for_painting_line)) {
-            PrintGameResult(language, true, hidden_word, ending_menu_English);
+        if (EnterWord(10, letters * 2 + 1, 50, 1, Russian_keyboard, field, hidden_word, entered_word, check_for_painting_line)) {
+            PrintGameResult(language, true, hidden_word, ending_menu_Russian);
         }
         else {
-            PrintGameResult(language, false, hidden_word, ending_menu_English);
+            PrintGameResult(language, false, hidden_word, ending_menu_Russian);
         }
     }
     else if (language == "ENGLISH") {

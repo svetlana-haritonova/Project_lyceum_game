@@ -1,4 +1,4 @@
-#ifndef Constants_h
+﻿#ifndef Constants_h
 #define Constants_h
 
 #include <iostream>
@@ -63,9 +63,9 @@ const vector<string> menu_of_languages = { "ENGLISH", "RUSSIAN" };
 
 const vector<string> menu_of_options_English = { "5 LETTERS", "6 LETTERS", "7 LETTERS" };
 
-const vector<string> menu_of_options_Russian = { "5 ÁÓÊÂ", "6 ÁÓÊÂ", "7 ÁÓÊÂ", };
+const vector<string> menu_of_options_Russian = { "5 БУКВ", "6 БУКВ", "7 БУКВ", };
 
-const vector<string> ending_menu_Russian = { "ÍÀ×ÀÒÜ ÇÀÍÎÂÎ",  "    ÂÛÉÒÈ    "};
+const vector<string> ending_menu_Russian = { "НАЧАТЬ ЗАНОВО",  "    ВЫХОД    "};
 
 const vector<string> ending_menu_English = { "START AGAIN",  "   EXIT    " };
 

@@ -1,4 +1,4 @@
-#include "Game.h"
+ï»¿#include "Game.h"
 #include "../Constants/Constants.h"
 #include <iostream>
 #include <windows.h>
@@ -197,7 +197,7 @@ void Game::SetGameAttributes(const string& language, string& hidden_word, vector
     GoToXY(static_cast<int>(Coordinates::STATUS_X), static_cast<int>(Coordinates::STATUS_Y));
     if (language == "RUSSIAN") {
         SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_PURPLE);
-        cout << "ÂÛÁÅÐÈÒÅ ÐÅÆÈÌ ÈÃÐÛ";
+        cout << "Ð’Ð«Ð‘Ð•Ð Ð˜Ð¢Ð• Ð Ð•Ð–Ð˜Ðœ Ð˜Ð“Ð Ð«";
         stringstream option(MenuChoice(static_cast<int>(Coordinates::MENU_X), static_cast<int>(Coordinates::MENU_Y) - 1, menu_of_options_Russian));
         //get option because option is string we need to get number of letters from this option use stringstream
         option >> letters; //get letters

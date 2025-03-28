@@ -10,7 +10,6 @@
 #include <ctime>
 #include <random>
 #include <cstdlib>
-#include <stdexcept>
 
 using std::vector;
 using std::fstream;

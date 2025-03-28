@@ -22,7 +22,7 @@ using std::min;
 
 
 int main() {
-    Game game;
-    game.Run();
+    Game game; //создание объекта класса
+    game.Run(); //запуск игры
     return 0;
  }

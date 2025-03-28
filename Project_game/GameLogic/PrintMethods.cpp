@@ -91,6 +91,7 @@ void Game::PrintIntrodaction() {
 }
 
 void Game::PrintGameResult(const string& language, bool win, const string& hidden_word, const vector<string>& ending_menu) {
+    setlocale(0, "Rus");
     if (win) { //if win == true means we guess the word
         if (language == "RUSSIAN") {
             while (true) {

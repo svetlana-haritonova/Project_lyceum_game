@@ -70,6 +70,7 @@ const vector<string> ending_menu_Russian = { "НАЧАТЬ ЗАНОВО",  "    
 const vector<string> ending_menu_English = { "START AGAIN",  "   EXIT    " };
 
 //клавиатуры
+//пробелы в векторе клавиатур для симметричности, обе клавиатуры в string потому что у русского пробема с char...
 
 const vector<vector<string>> English_keyboard = {
         {"q", "w", "e", "r", "t", "y", "u", "i", "o", "p"},

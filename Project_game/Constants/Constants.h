@@ -8,18 +8,18 @@
 using std::vector;
 using std::string;
 
-#define STD_OUTPUT_HANDLE   ((DWORD)-11)  //константа для получения дескриптора консоли
+#define STD_OUTPUT_HANDLE   ((DWORD)-11)  //коснтанта для получения дескриптора консоли
 
-#define FOREGROUND_BLUE      0x0001 //цвет текста
+#define FOREGROUND_BLUE      0x0001 // цвета текста
 #define FOREGROUND_GREEN     0x0002
 #define FOREGROUND_RED       0x0004
-#define FOREGROUND_INTENSITY 0x0008 //усиленный цвет текста
-#define BACKGROUND_BLUE      0x0010 //цвет фона
+#define FOREGROUND_INTENSITY 0x0008 // делает цвет текста ярче
+#define BACKGROUND_BLUE      0x0010 // цвета фона
 #define BACKGROUND_GREEN     0x0020
 #define BACKGROUND_RED       0x0040
-#define BACKGROUND_INTENSITY 0x0080 //усиленный цвет фона
+#define BACKGROUND_INTENSITY 0x0080 // делает цвет фона ярче
 #define FOREGROUND_BLACK       0
-#define FOREGROUND_GREY        FOREGROUND_INTENSITY // mixed text and background colors 
+#define FOREGROUND_GREY        FOREGROUND_INTENSITY // смешанные цвета фона и текста
 #define FOREGROUND_PINK        FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_INTENSITY
 #define FOREGROUND_PURPLE      FOREGROUND_RED | FOREGROUND_BLUE
 #define FOREGROUND_WHITE       FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY
@@ -30,7 +30,7 @@ using std::string;
 
 const int CURSOR_SIZE = 100; //размер курсора
 
-enum class Coordinates : int { //координаты атрибутов игры
+enum class Coordinates : int { //координаты элементов игры
     STATUS_X = 50,
     STATUS_Y = 10,
     MENU_X = 56,
@@ -41,7 +41,7 @@ enum class Coordinates : int { //координаты атрибутов игр�
     KEYBOARD_Y = 10,
 };
 
-enum class Keyboard_Keys : int { //клавиши на клавиатуре и их номера
+enum class Keyboard_Keys : int { //клавиши на клавиатуре и их код
     UP = 72,
     DOWN = 80,
     BACKSPACE = 8,
@@ -51,7 +51,7 @@ enum class Keyboard_Keys : int { //клавиши на клавиатуре и �
     ESCAPE = 27
 };
 
-enum class Letters : int { //перечисление количества букв
+enum class Letters : int { //количество букв
     LETTERS_5 = 5,
     LETTERS_6 = 6,
     LETTERS_7 = 7,

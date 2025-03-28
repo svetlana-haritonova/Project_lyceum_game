@@ -9,7 +9,7 @@ using std::vector;
 using std::cout;
 using std::endl;
 
-void Game::PrintMenu(int x, int y, const vector<string>&menu, int choice) { //функция для отрисовки разного меню
+void Game::PrintMenu(int x, int y, const vector<string>&menu, int choice) { //функция для отрисовки меню
     GoToXY(x, y);
     for (int i = 0; i < menu.size(); ++i) {
         GoToXY(x, y + i);
@@ -19,28 +19,28 @@ void Game::PrintMenu(int x, int y, const vector<string>&menu, int choice) { //ф
         else SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_WHITE);
         cout << menu[i] << endl;
     }
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_WHITE | BACKGROUND_BLACK); //возвращаем базовые параметры отрисовки
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_WHITE | BACKGROUND_BLACK); //возвращаем обычные параметры текста
 }
 
 void Game::PrintField(int x, int y, const vector<vector<std::string>>& field, const string& hidden_word, const vector<bool>& check_for_paint_line) { //функция для отрисовки поля
-    int begin_x = x, begin_y = y; //переменные для корректного рисования поля. фиксируют последнее положение курсора
+    int begin_x = x, begin_y = y; //переменные для корректного рисования поля, фиксируют последнее положение курсора
     for (int i = 0; i < field.size(); ++i) {
         for (int j = 0; j < field[0].size(); ++j) {
             GoToXY(x, y);
             SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_GREY);
             cout << "_______";
             ++y;
-            if (check_for_paint_line[i]) { //если сохраняем слово, то окрашиваем его
+            if (check_for_paint_line[i]) { //если слово сохранено, то окрашиваем его
                 if (std::find(hidden_word.begin(), hidden_word.end(), field[i][j][0]) != hidden_word.end()) {
                     if (field[i][j][0] == hidden_word[j]) { //используем [0], потому что поле из вектора строк
-                        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_WHITE | BACKGROUND_GREEN);
+                        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_WHITE | BACKGROUND_GREEN); //если угадали положение и букву красим её зеленым
                     }
                     else {
-                        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_WHITE | BACKGROUND_YELLOW);
+                        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_WHITE | BACKGROUND_YELLOW); //если угадали букву но не угадали её положение красим желтым
                     }
                 }
                 else {
-                    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_WHITE | BACKGROUND_RED);
+                    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_WHITE | BACKGROUND_RED); //если не угадали букву красим красным
                 }
             }
             GoToXY(x, y);
@@ -66,8 +66,8 @@ void Game::PrintKeyboard(int x, int y, vector<vector<string>> keyboard, vector<v
     for (int i = 0; i < keyboard.size(); ++i) {
         for (int j = 0; j < keyboard[i].size(); ++j) {
             GoToXY(x + j * 3, y + i * 2); //j * 3 расстояние между буквой и скобкой, i * 2 опуститься вниз
-            if (keyboard[i][j] != " ") { //убедитесь, что мы не показываем пробелы
-                if (i == keyboard_row && j == keyboard_column) { //отображение клавиатуры. Если курсор на букве в консоли, то выделяем ее
+            if (keyboard[i][j] != " ") { //убедитесь, что мы не выводим пробелы
+                if (i == keyboard_row && j == keyboard_column) { //отображение клавиатуры, если курсор на букве в консоли, то выделяем ее
                     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_GREEN);
                     cout << "[" << keyboard[i][j] << "]";
                 }
@@ -91,8 +91,7 @@ void Game::PrintIntrodaction() {
 }
 
 void Game::PrintGameResult(const string& language, bool win, const string& hidden_word, const vector<string>& ending_menu) {
-    setlocale(0, "Rus");
-    if (win) { //если победа == true значит, что отгадали слово
+    if (win) { //если win == true значит, что отгадали слово
         if (language == "RUSSIAN") {
             while (true) {
                  SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_GREEN);
@@ -108,7 +107,7 @@ void Game::PrintGameResult(const string& language, bool win, const string& hidde
                 if (MenuChoice(static_cast<int>(Coordinates::MENU_X), static_cast<int>(Coordinates::MENU_Y) + 1, ending_menu_Russian) == "НАЧАТЬ ЗАНОВО") {
                     break;
                 }
-                else {
+                else { //если мы нажали на выход вызодим из программы
                     exit(0);
                 }
             }

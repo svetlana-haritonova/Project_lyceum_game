@@ -24,13 +24,13 @@ using std::srand;
 using std::rand;
 using std::time;
 
-string Game::GetRandomWord(const string& filename) { //функция для выбора рандомного слова
-    srand(static_cast<unsigned int>(time(nullptr))); //инициализация выбора рандомного числа
+string Game::GetRandomWord(const string& filename) { //функция получение рандомного слова из файла
+    srand(static_cast<unsigned int>(time(nullptr))); //инициализация генератора рандомного числа
     fstream file;
     file.open(filename);
     string sentence, word;
     vector<string> words;
-    while (getline(file, sentence)) { //вставляем слова из файла в вектор
+    while (getline(file, sentence)) { //добавляем слова из файла в вектор
         stringstream text(sentence);
         while (text >> word) {
             words.push_back(word);
@@ -38,35 +38,35 @@ string Game::GetRandomWord(const string& filename) { //функция для в�
     }
     file.close();
     int randomIndex = rand() % words.size(); //генерируем рандомное число в диапазоне
-    return words[randomIndex]; //возвращаем рандомное слово из файла
+    return words[randomIndex]; //возвращаем слово под данным индексом
 }
 
-void Game::GoToXY(int x, int y) { //перемещаем курсор на (x, y)
-    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(x), static_cast<short>(y) }); //int в short, так как для SetConsoleCursorPosition нужен данный тип
+void Game::GoToXY(int x, int y) { //перермещение курсора на позицию (x, y)
+    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(x), static_cast<short>(y) }); //переводим int в short потому что SetConsoleCursorPosition использует этот тип данных
 }
 
 void Game::ConsoleCursorVisible(bool show, short size) {
-    CONSOLE_CURSOR_INFO struct_cursor_info; //переменная для данных курсора
-    GetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &struct_cursor_info); //получение текущих данных курсора
-    struct_cursor_info.bVisible = show; //изменить видимость курсора
-    struct_cursor_info.dwSize = size; //изменить размер курсора
-    SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &struct_cursor_info); //сделать изменения курсора
+    CONSOLE_CURSOR_INFO struct_cursor_info; //данные о курсоре
+    GetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &struct_cursor_info); //получаем текущие данные о курсоре
+    struct_cursor_info.bVisible = show; //редактируем видимость курсора
+    struct_cursor_info.dwSize = size; //редактируем размер курсора
+    SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &struct_cursor_info); //применяем изменения к курсору
 }
 
 
 
-string Game::MenuChoice(int x, int y, const vector<string>& menu) { //выбрать опцию в меню
-    int choice = 0; //переменная для перемещения между опциями
-    char button; //переменная для выбора кнопки
+string Game::MenuChoice(int x, int y, const vector<string>& menu) { //функция для получения выбранной опции из меню
+    int choice = 0; //переменная отвечающая за движения по меню
+    char button; //переменная для получения символа с консоли
     while (true) {
-        PrintMenu(x, y, menu, choice); //показываем меню, пока не выбрана одна опция
-        button = _getch();
-        Keyboard_Keys key = static_cast<Keyboard_Keys>(button);
+        PrintMenu(x, y, menu, choice); //рисуем меню пока мы не выбрали опцию
+        button = _getch(); //считываем символ с консоли
+        Keyboard_Keys key = static_cast<Keyboard_Keys>(button); //переводим полученное значения в тип данных Keyboard_Keys(enum)
         switch (key) {
         case Keyboard_Keys::ESCAPE:
             exit(0);
         case Keyboard_Keys::UP:
-            if (choice > 0) { //границы, чтобы не выйти за пределы вектора
+            if (choice > 0) { //ограничения чтобы не выходить за границы вектора
                 --choice;
             }
             break;
@@ -77,7 +77,7 @@ string Game::MenuChoice(int x, int y, const vector<string>& menu) { //выбра
             break;
         case Keyboard_Keys::ENTER:
             system("CLS");
-            return menu[choice];
+            return menu[choice]; //если нажали enter возвращаем выбранную опцию 
         default:
             break;
         }
@@ -85,32 +85,32 @@ string Game::MenuChoice(int x, int y, const vector<string>& menu) { //выбра
 }
 
 vector<vector<string>> Game::CreateField(int height, int width) {
-    vector<vector<string>> field(height, vector<string>(width, " ")); //создаём поле
+    vector<vector<string>> field(height, vector<string>(width, " ")); //создание поля
     return field;
 }
 
 bool Game::EnterWord(int pos_keyboard_x, int pos_keyboard_y, int pos_field_x, int pos_field_y, const vector<vector<string>>& keyboard, vector<vector<string>>& field, const string& hidden_word, string& entered_word, vector<bool>& check_for_painting_line) {
-    int keyboard_row = 0; //переменные для перемещения по клавиатуре
+    int keyboard_row = 0; //переменные отвечающие за перемещение по клавиатуре
     int keyboard_column = 0;
-    int field_row = 0; //переменные для перемещения по полю
+    int field_row = 0; //переменные отвечающие за перемещение по полю
     int field_column = 0;
     char button;
     while (true) {
-        PrintField(pos_field_x, pos_field_y, field, hidden_word, check_for_painting_line);
-        PrintKeyboard(pos_keyboard_x, pos_keyboard_y, keyboard, field, keyboard_row, keyboard_column, field_row, field_column, hidden_word, entered_word, check_for_painting_line);
+        PrintField(pos_field_x, pos_field_y, field, hidden_word, check_for_painting_line); //отрисовываем поле
+        PrintKeyboard(pos_keyboard_x, pos_keyboard_y, keyboard, field, keyboard_row, keyboard_column, field_row, field_column, hidden_word, entered_word, check_for_painting_line); //отрисовываем клавиатуру
         button = _getch();
-        Keyboard_Keys key = static_cast<Keyboard_Keys>(button); //измение типа получаемого знака на тип Keyboard_Keys
+        Keyboard_Keys key = static_cast<Keyboard_Keys>(button); //переводим полученный символ в тип данных Keyboard_Keys(enum)
         switch (key) {
-        case Keyboard_Keys::UP: //стрелка вверх 
-            if (keyboard_row > 0 && keyboard[keyboard_row][keyboard_column] != " ") { //поднимаем границу вектора и проверяем, что это не пробел
+        case Keyboard_Keys::UP: //стрелочки вверх
+            if (keyboard_row > 0 && keyboard[keyboard_row][keyboard_column] != " ") { //верхние границы вектора и проверяем что это не пробел на клавиатуре
                 --keyboard_row;
             }
             break;
-        case Keyboard_Keys::DOWN: //стрелка вниз
-            if (keyboard_row < keyboard.size() - 1) { //нижняя граница
+        case Keyboard_Keys::DOWN: //стрелочки вниз
+            if (keyboard_row < keyboard.size() - 1) { //нижние границы
                 ++keyboard_row;
-                int min_distance = min(keyboard_column, keyboard[0].size() - keyboard_column); //минимальная дистанция. находим, на какой части клавиатуры мы находимся
-                //используем чтобы избежать перехода к пробелам и к концу вектора
+                int min_distance = min(keyboard_column, keyboard[0].size() - keyboard_column); //min distance, we find on which part of keyboard we are
+                //using this for avoiding get to whitespace and to the end of vector
                 if (keyboard[keyboard_row][keyboard_column] == " ") {
                     if (min_distance == keyboard_column) {
                         while (keyboard[keyboard_row][keyboard_column] == " " && keyboard_column < keyboard[0].size() - 1) {
@@ -126,54 +126,54 @@ bool Game::EnterWord(int pos_keyboard_x, int pos_keyboard_y, int pos_field_x, in
             }
             break;
 
-        case Keyboard_Keys::LEFT: //стрелка влево
-            if (keyboard_column > 0) { //левая граница
+        case Keyboard_Keys::LEFT: //стрелочки влево
+            if (keyboard_column > 0) { //left boards
                 --keyboard_column;
-                if (keyboard[keyboard_row][keyboard_column] == " ") { //если пробел, то возвращаемся назад
+                if (keyboard[keyboard_row][keyboard_column] == " ") { //check if it is whitespace go back
                     ++keyboard_column;
                 }
             }
             break;
-        case Keyboard_Keys::RIGHT: //правая стрелка
-            if (keyboard_column < keyboard[0].size() - 1 && keyboard[keyboard_row][keyboard_column] != " ") { //правая граница
+        case Keyboard_Keys::RIGHT: //arrows right
+            if (keyboard_column < keyboard[0].size() - 1 && keyboard[keyboard_row][keyboard_column] != " ") { //right boards
                 ++keyboard_column;
-                if (keyboard[keyboard_row][keyboard_column] == " ") { //если пробел, то возвращаемся назад
+                if (keyboard[keyboard_row][keyboard_column] == " ") { //check if it is whitespace go back
                     --keyboard_column;
                 }
             }
             break;
         case Keyboard_Keys::ENTER: //enter
-            if (field[field_row][field_column] == " ") { //проверяем, что место на поле свободно
-                field[field_row][field_column] = keyboard[keyboard_row][keyboard_column]; //добавляем букву в поле
-                if (field_column != field[0].size() - 1) { //если это не последняя буква, идём вправо
+            if (field[field_row][field_column] == " ") { //check that place is free
+                field[field_row][field_column] = keyboard[keyboard_row][keyboard_column]; //add letters to field
+                if (field_column != field[0].size() - 1) { //if it isn`t last letter go right
                     ++field_column;
                 }
             }
-            else if (field[field_row][field_column] != " " && field_column == field[0].size() - 1) { //если добавили все буквы в ряд, то сохраняем их
-                check_for_painting_line[field_row] = true; //изменяем статус ряда(сохраняем слово)
+            else if (field[field_row][field_column] != " " && field_column == field[0].size() - 1) { //if we enter all letters in row save it
+                check_for_painting_line[field_row] = true; //change row status(means that we save word)
                 entered_word = "";
                 for (int i = 0; i < field[0].size(); ++i) {
-                    entered_word += field[field_row][i]; //собираем сохранённое слова из букв
+                    entered_word += field[field_row][i]; //collect entered word from letters
                 }
-                if (entered_word == hidden_word) { //если угадали слово
-                    PrintField(pos_field_x, pos_field_y, field, hidden_word, check_for_painting_line); //печатаем поле еще раз, чтобы покрасить последнее введенное слово
+                if (entered_word == hidden_word) { //if we guess the word
+                    PrintField(pos_field_x, pos_field_y, field, hidden_word, check_for_painting_line); //print field again for painting the last entered word
                     system("CLS");
-                    return true; //возвращаем true, так как угадали слово
+                    return true; //return true because we guess the word
                 }
-                else if (field_row == field.size() - 1 && check_for_painting_line[field_row] == true) { //если сохранили последнее слово в поле и не угадали слово
-                    PrintField(pos_field_x, pos_field_y, field, hidden_word, check_for_painting_line); //печатаем поле еще раз, чтобы покрасить последнее введенное слово
+                else if (field_row == field.size() - 1 && check_for_painting_line[field_row] == true) { //if we save the last word in field and not guess the word
+                    PrintField(pos_field_x, pos_field_y, field, hidden_word, check_for_painting_line); //print field again for painting the last entered word
                     system("CLS");
-                    return false; //возвращаем false, так как не угадали слово
+                    return false; //return false because we don`t guess the word
                 }
-                if (field_row != field.size() - 1) { //если это не последняя попытка, то спускаемся вниз
+                if (field_row != field.size() - 1) { //if it isn`t our last attemot go down
                     ++field_row;
                     field_column = 0;
                 }
             }
             break;
-        case Keyboard_Keys::BACKSPACE: //backspace для удаления букв
-            if (field_column != 0) { //проверяем, что мы не на первой букве
-                if (field[field_row][field_column] == " ") { //если нажмем несколько раз, то двигаемся влево, чтобы очистить предыдущую ячейку
+        case Keyboard_Keys::BACKSPACE: //backspace for erasing letters
+            if (field_column != 0) { //check that we not on first 
+                if (field[field_row][field_column] == " ") { //if we press it several times go left to clean pref cell
                     --field_column;
                     field[field_row][field_column] = " ";
                 }
@@ -199,11 +199,11 @@ void Game::SetGameAttributes(const string& language, string& hidden_word, vector
         SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_PURPLE);
         cout << "ВЫБЕРИТЕ РЕЖИМ ИГРЫ";
         stringstream option(MenuChoice(static_cast<int>(Coordinates::MENU_X), static_cast<int>(Coordinates::MENU_Y) - 1, menu_of_options_Russian));
-        //поскольку параметр является строкой, то нужно получить количество букв из этого параметра, используя stringstream
-        option >> letters; //получить буквы
-        vector<vector<string>> field = CreateField(letters, letters); //создать поле
-        vector<bool> check_for_painting_line(letters, false); //создаем вектор bool. когда сохраняем слово, изменяем строку word в этом векторе на true
-        switch (letters) { //получить hidden_word
+        //get option because option is string we need to get number of letters from this option use stringstream
+        option >> letters; //get letters
+        vector<vector<string>> field = CreateField(letters, letters); //create field
+        vector<bool> check_for_painting_line(letters, false); //create bool vector when we save word, change word`s row in this vector as true
+        switch (letters) { //get hidden_word
         case static_cast<int>(Letters::LETTERS_5):
             hidden_word = GetRandomWord("Dictionaries/Russian_5.txt");
             break;
@@ -216,12 +216,12 @@ void Game::SetGameAttributes(const string& language, string& hidden_word, vector
         default:
             break;
         }
-        //используем функцию enterword для отрисовки клавиатуры и поля и для угадывания слова
+        //use func enterword for print keyboard and field and to guess the word
         if (EnterWord(static_cast<int>(Coordinates::KEYBOARD_X), static_cast<int>(Coordinates::KEYBOARD_Y), static_cast<int>(Coordinates::FIELD_X), static_cast<int>(Coordinates::FIELD_Y), Russian_keyboard, field, hidden_word, entered_word, check_for_painting_line)) {
-            PrintGameResult(language, true, hidden_word, ending_menu_Russian); //если угадали слово, то выводим финальное меню с результатом, где победа == true
+            PrintGameResult(language, true, hidden_word, ending_menu_Russian); //if we guess hidden word print game result with parametr win as true
         }
         else {
-            PrintGameResult(language, false, hidden_word, ending_menu_Russian); //если не угадали слово, то выводим финальное меню с результатом, где победа == false
+            PrintGameResult(language, false, hidden_word, ending_menu_Russian); //if we don`t guess the word print game result with parametr win as false
         }
     }
     else if (language == "ENGLISH") {

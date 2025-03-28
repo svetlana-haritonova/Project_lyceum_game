@@ -63,9 +63,9 @@ const vector<string> menu_of_languages = { "ENGLISH", "RUSSIAN" };
 
 const vector<string> menu_of_options_English = { "5 LETTERS", "6 LETTERS", "7 LETTERS" };
 
-const vector<string> menu_of_options_Russian = { "5 ÁÓÊÂ", "6 ÁÓÊÂ", "7 ÁÓÊÂ", };
+const vector<string> menu_of_options_Russian = { "5 ÃÃ“ÃŠÃ‚", "6 ÃÃ“ÃŠÃ‚", "7 ÃÃ“ÃŠÃ‚", };
 
-const vector<string> ending_menu_Russian = { "ÍÀ×ÀÒÜ ÇÀÍÎÂÎ",  "    ÂÛÉÒÈ    "};
+const vector<string> ending_menu_Russian = { "ÃÃ€Ã—Ã€Ã’Ãœ Ã‡Ã€ÃÃÃ‚Ã",  "    Ã‚Ã›Ã‰Ã’Ãˆ    "};
 
 const vector<string> ending_menu_English = { "START AGAIN",  "   EXIT    " };
 
@@ -78,9 +78,9 @@ const vector<vector<string>> English_keyboard = {
 };
 
 const vector<vector<string>> Russian_keyboard = {
-    {"¸", "é", "ö", "ó", "ê", "å", "í", "ã", "ø", "ù", "ç", "õ", "ú"},
-    {" ", "ô", "û", "â", "à", "ï", "ğ", "î", "ë", "ä", "æ", "ı", " "},
-    {" ", " ", "ÿ", "÷", "ñ", "ì", "è", "ò", "ü", "á", "ş", " ", " "}
+    {"Ñ‘", "Ğ¹", "Ñ†", "Ñƒ", "Ğº", "Ğµ", "Ğ½", "Ğ³", "Ñˆ", "Ñ‰", "Ğ·", "Ñ…", "ÑŠ"},
+    {" ", "Ñ„", "Ñ‹", "Ğ²", "Ğ°", "Ğ¿", "Ñ€", "Ğ¾", "Ğ»", "Ğ´", "Ğ¶", "Ñ", " "},
+    {" ", " ", "Ñ", "Ñ‡", "Ñ", "Ğ¼", "Ğ¸", "Ñ‚", "ÑŒ", "Ğ±", "Ñ", " ", " "}
 };
 
 #endif

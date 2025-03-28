@@ -94,17 +94,17 @@ void Game::PrintGameResult(const string& language, bool win, const string& hidde
     if (win) { //if win == true means we guess the word
         if (language == "RUSSIAN") {
             while (true) {
-                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_GREEN);
-                GoToXY(static_cast<int>(Coordinates::STATUS_X), static_cast<int>(Coordinates::STATUS_Y));
-                cout << "      œŒ«ƒ–¿¬Àﬂ≈Ã!";
-                GoToXY(static_cast<int>(Coordinates::STATUS_X), static_cast<int>(Coordinates::STATUS_Y) + 1);
-                cout << "    ¬€ ”√¿ƒ¿À» —ÀŒ¬Œ";
-                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_WHITE);
-                GoToXY(static_cast<int>(Coordinates::STATUS_X), static_cast<int>(Coordinates::STATUS_Y) + 2);
-                cout << "«¿√¿ƒÕÕŒ≈ —ÀŒ¬Œ: ";
-                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_GREEN | FOREGROUND_INTENSITY);
-                cout << hidden_word;
-                if (MenuChoice(static_cast<int>(Coordinates::MENU_X), static_cast<int>(Coordinates::MENU_Y) + 1, ending_menu_Russian) == "Õ¿◊¿“‹ «¿ÕŒ¬Œ") {
+                 SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_GREEN);
+                 GoToXY(static_cast<int>(Coordinates::STATUS_X), static_cast<int>(Coordinates::STATUS_Y));
+                 cout << "      –ü–û–ó–î–†–ê–í–õ–Ø–ï–ú!";
+                 GoToXY(static_cast<int>(Coordinates::STATUS_X), static_cast<int>(Coordinates::STATUS_Y) + 1);
+                 cout << "    –í–´ –£–ì–ê–î–ê–õ–ò –°–õ–û–í–û";
+                 SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_WHITE);
+                 GoToXY(static_cast<int>(Coordinates::STATUS_X), static_cast<int>(Coordinates::STATUS_Y) + 2);
+                 cout << "–ó–ê–ì–ê–î–ù–ù–û–ï –°–õ–û–í–û: ";
+                 SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_GREEN | FOREGROUND_INTENSITY);
+                 cout << hidden_word;
+                if (MenuChoice(static_cast<int>(Coordinates::MENU_X), static_cast<int>(Coordinates::MENU_Y) + 1, ending_menu_Russian) == "√ç√Ä√ó√Ä√í√ú √á√Ä√ç√é√Ç√é") {
                     break;
                 }
                 else {
@@ -139,13 +139,13 @@ void Game::PrintGameResult(const string& language, bool win, const string& hidde
             while (true) {
                 SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_RED);
                 GoToXY(static_cast<int>(Coordinates::STATUS_X), static_cast<int>(Coordinates::STATUS_Y));
-                cout << "      ¬€ œ–Œ»√–¿À» ";
+                cout << "      –í–´ –ü–†–û–ò–ì–†–ê–õ–ò ";
                 SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_WHITE);
                 GoToXY(static_cast<int>(Coordinates::STATUS_X), static_cast<int>(Coordinates::STATUS_Y) + 1);
-                cout << "«¿√¿ƒÕÕŒ≈ —ÀŒ¬Œ: ";
+                cout << "–ó–ê–ì–ê–î–ù–ù–û–ï –°–õ–û–í–û: ";
                 SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_RED | FOREGROUND_INTENSITY);
                 cout << hidden_word;
-                if (MenuChoice(static_cast<int>(Coordinates::MENU_X), static_cast<int>(Coordinates::MENU_Y), ending_menu_Russian) == "Õ¿◊¿“‹ «¿ÕŒ¬Œ") {
+                if (MenuChoice(static_cast<int>(Coordinates::MENU_X), static_cast<int>(Coordinates::MENU_Y), ending_menu_Russian) == "√ç√Ä√ó√Ä√í√ú √á√Ä√ç√é√Ç√é") {
                     break;
                 }
                 else {

@@ -22,9 +22,10 @@ using std::endl;
 using std::min;
 using std::srand;
 using std::rand;
+using std::time;
 
 string Game::GetRandomWord(const string& filename) { //func for getting random word
-    srand(static_cast<unsigned int>(std::time(nullptr))); //initialization generation of random numbers
+    srand(static_cast<unsigned int>(time(nullptr))); //initialization generation of random numbers
     fstream file;
     file.open(filename);
     string sentence, word;
@@ -56,7 +57,7 @@ void Game::ConsoleCursorVisible(bool show, short size) {
 
 string Game::MenuChoice(int x, int y, const vector<string>& menu) { //get choosing option from menu
     int choice = 0; //varaible for moving on menu
-    int button; //varaible for choosing button
+    char button; //varaible for choosing button
     while (true) {
         PrintMenu(x, y, menu, choice); //print menu while we don`t choose option
         button = _getch();
@@ -93,7 +94,7 @@ bool Game::EnterWord(int pos_keyboard_x, int pos_keyboard_y, int pos_field_x, in
     int keyboard_column = 0;
     int field_row = 0; //variables for moving on field
     int field_column = 0;
-    int button;
+    char button;
     while (true) {
         PrintField(pos_field_x, pos_field_y, field, hidden_word, check_for_painting_line);
         PrintKeyboard(pos_keyboard_x, pos_keyboard_y, keyboard, field, keyboard_row, keyboard_column, field_row, field_column, hidden_word, entered_word, check_for_painting_line);
@@ -203,18 +204,19 @@ void Game::SetGameAttributes(const string& language, string& hidden_word, vector
         vector<vector<string>> field = CreateField(letters, letters); //create field
         vector<bool> check_for_painting_line(letters, false); //create bool vector when we save word, change word`s row in this vector as true
         switch (letters) { //get hidden_word
-        case 5:
+        case static_cast<int>(Letters::LETTERS_5):
             hidden_word = GetRandomWord("Dictionaries/Russian_5.txt");
             break;
-        case 6:
+        case static_cast<int>(Letters::LETTERS_6):
             hidden_word = GetRandomWord("Dictionaries/Russian_6.txt");
             break;
-        case 7:
+        case static_cast<int>(Letters::LETTERS_7):
             hidden_word = GetRandomWord("Dictionaries/Russian_7.txt");
             break;
         default:
             break;
         }
+        //use func enterword for print keyboard and field and to guess the word
         if (EnterWord(static_cast<int>(Coordinates::KEYBOARD_X), static_cast<int>(Coordinates::KEYBOARD_Y), static_cast<int>(Coordinates::FIELD_X), static_cast<int>(Coordinates::FIELD_Y), Russian_keyboard, field, hidden_word, entered_word, check_for_painting_line)) {
             PrintGameResult(language, true, hidden_word, ending_menu_Russian); //if we guess hidden word print game result with parametr win as true
         }
@@ -229,13 +231,13 @@ void Game::SetGameAttributes(const string& language, string& hidden_word, vector
         vector<vector<string>> field = CreateField(letters, letters);
         vector<bool> check_for_painting_line(letters, false);
         switch (letters) {
-        case 5:
+        case static_cast<int>(Letters::LETTERS_5):
             hidden_word = GetRandomWord("Dictionaries/English_5.txt");
             break;
-        case 6:
+        case static_cast<int>(Letters::LETTERS_6):
             hidden_word = GetRandomWord("Dictionaries/English_6.txt");
             break;
-        case 7:
+        case static_cast<int>(Letters::LETTERS_7):
             hidden_word = GetRandomWord("Dictionaries/English_7.txt");
             break;
         default:

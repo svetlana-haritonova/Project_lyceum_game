@@ -51,6 +51,12 @@ enum class Keyboard_Keys : int { //buttons on keyboard and its number
     ESCAPE = 27
 };
 
+enum class Letters : int { // enum of number of letters
+    LETTERS_5 = 5,
+    LETTERS_6 = 6,
+    LETTERS_7 = 7,
+};
+
 //menu
 
 const vector<string> menu_of_languages = { "ENGLISH", "RUSSIAN" };
